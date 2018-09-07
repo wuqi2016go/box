@@ -1,6 +1,6 @@
-# mpvue-echart-example
+# box
 
-> mpvue-echarts 使用示例
+> box 使用示例
 
 ## Build Setup
 
