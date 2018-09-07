@@ -1,8 +1,12 @@
-# mpvue-echart-example
+# box
 
-> mpvue-echarts 使用示例
+> box 使用示例
 
 ## Build Setup
+
+# 下载代码
+
+git clone http://192.168.168.62:1111/wuqi/box.git
 
 ``` bash
 # install dependencies
