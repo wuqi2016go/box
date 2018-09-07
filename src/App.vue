@@ -1,11 +1,6 @@
 <script>
-  // const obj = {'uname': 'root', 'upasswd': '123456', 'bmac': 13754242854216}
   export default {
     onLaunch () {
-      // api.post('/login', obj, null, r => {
-      //   wx.setStorageSync('user', r.data)
-      //   console.log('登陆成功')
-      // })
     },
     created () {
       // 调用API从本地缓存中获取数据
