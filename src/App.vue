@@ -1,6 +1,7 @@
 <script>
   export default {
     onLaunch () {
+      //
     },
     created () {
       // 调用API从本地缓存中获取数据
