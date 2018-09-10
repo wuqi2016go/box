@@ -53,7 +53,7 @@
           let _this = this
           wx.showModal({
             title: '切换家小盒',
-            content: '确定切换该盒子吗',
+            content: '确定切换到该盒子吗',
             confirmText: '确认',
             cancelText: '取消',
             success: function (res) {
@@ -85,10 +85,10 @@
             success: res => {
               // 设置盒子后，更改session
               if (res.data.statusCode === 200) {
-                console.log('userbox')
                 wx.setStorageSync('sessionId', res.header['Set-Cookie'])
                 let user = wx.getStorageSync('user')
                 user.box = box
+                user.bmac = box.bmac
                 wx.setStorageSync('user', user)
                 wx.switchTab({
                   url: '/pages/box/home',

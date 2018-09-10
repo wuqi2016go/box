@@ -13,7 +13,8 @@ module.exports = [
       navigationBarTitleText: '主页',
       enablePullDownRefresh: true,
       usingComponents: {
-        'i-avatar': '../../iView/avatar/index'
+        'i-avatar': '../../iView/avatar/index',
+        "i-notice-bar": "../../iView/notice-bar/index"
       }
     }
   }, {

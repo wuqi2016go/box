@@ -1,5 +1,9 @@
 <template>
   <div class="page">
+
+    <i-notice-bar v-if="noticeShow" icon="systemprompt" loop speed="2000" closable>
+      家小盒离线，请检查供电及网络情况
+    </i-notice-bar>
     <div class="weui-tab__bd">
       <div class="weui-panel weui-panel_access">
         <div class="weui-panel__hd" @click="personmore">
@@ -81,7 +85,7 @@
         person: [],
         personSize: 0,
         present: {},
-        user: {}
+        noticeShow: false
       }
     },
     onLoad () {
@@ -90,6 +94,10 @@
       this.presentData()
     },
     onShow () {
+      // 判断设备是否在线
+      this.getBoxState()
+
+      // 判断设备时都处于阻断状态
       let obj = wx.getStorageSync('block')
       wx.removeStorageSync('block')
       let _this = this
@@ -122,10 +130,9 @@
         let _this = this
         api.get('/person', {'online': 1, 'limit': 5}, null, r => {
           _this.personSize = r.data.length
-          let person = []
-          r.data.forEach(function (v, k) {
+          let person = r.data
+          person.forEach(function (v, k) {
             v['imageurl'] = api.ImgName(v.pimage)
-            person.push(v)
           })
           _this.person = person
         })
@@ -166,6 +173,10 @@
         wx.navigateTo({
           url: '/pages/box/devdetail'
         })
+      },
+      getBoxState () {
+        let user = wx.getStorageSync('user')
+        user.box.bstatus === 0?this.noticeShow = true:this.noticeShow = false
       },
       personinfo (index) {
         let person = this.person[index]

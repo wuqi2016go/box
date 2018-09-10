@@ -220,7 +220,6 @@
                 if(obj.atype === 2){video++}
               }
               listIndex++
-              console.log(listIndex)
             } else {
               if(starttime>endtime-5*60*60) {
                 pkt_other.push({value: 0, itemStyle: {color: '#15bbbc'}})

@@ -6,9 +6,7 @@
           <h4 class="weui-media-box__title">头像</h4>
         </div>
         <div class="weui-cell__ft">
-          <div class="pointDiv">
-            <img :src="user.imageurl" class="personImg" />
-          </div>
+          <Avatar :imageurl="user.imageurl" online="true" borderline="true"></Avatar>
         </div>
       </div>
 
@@ -35,22 +33,26 @@
       </div>
     </div>
 
-    <div class="weui-cells weui-cells_after-title">
-      <div class="weui-cell" @click="loginOut">
-        <div class="weui-cell__bd">
-          <h4 class="weui-media-box__title">退出登录</h4>
-        </div>
-      </div>
-    </div>
+    <!--<div class="weui-cells weui-cells_after-title">-->
+      <!--<div class="weui-cell" @click="loginOut">-->
+        <!--<div class="weui-cell__bd">-->
+          <!--<h4 class="weui-media-box__title">退出登录</h4>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
   </div>
 </template>
 
 <script>
+    import Avatar from '../../components/avatar'
     export default {
       data () {
         return {
           user: {}
         }
+      },
+      components: {
+        Avatar
       },
       onShow () {
         let _user = wx.getStorageSync('user')
@@ -121,20 +123,5 @@
   }
   .weui-cell__bd{
     margin-left: 0px;
-  }
-  .pointDiv {
-    height: 50px;
-    width: 50px;
-    text-align: center;
-    background: #f2fbfc;
-    border: 1px solid rgba(0, 188, 212, 0.60);
-    border-radius: 50px;
-  }
-  .personImg{
-    width: 42px;
-    height: 42px;
-    overflow: auto;
-    margin: auto;
-    top: 0; left: 0; bottom: 0; right: 0;
   }
 </style>
