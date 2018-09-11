@@ -131,11 +131,6 @@ module.exports = [
       navigationBarTitleText: '修改密码'
     }
   }, {
-    path: '/pages/box/bar',
-    config: {
-      navigationBarTitleText: '延迟加载'
-    }
-  }, {
     path: '/pages/box/carePerson',
     config: {
       navigationBarTitleText: '选择关注'

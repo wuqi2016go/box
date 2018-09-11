@@ -6,13 +6,13 @@
     </div>
     <!-- 需要使用 button 来授权登录 -->
 
-    <div class="button-sp-area">
-      <!--<button class="weui-btn" style="background: #00bcd4;color: #ffffff" @click="devupdate">确定</button>-->
-      <button v-if="canIUse"  open-type="getUserInfo" @click="bindGetUserInfo" class="weui-btn" style="background: #00bcd4;color: #ffffff">授权登录</button>
+    <div>
+      <button v-if="canIUse"  open-type="getUserInfo" @click="bindGetUserInfo" class="weui-btn authButton">授权登录</button>
       <div v-else>请升级微信版本</div>
     </div>
   </div>
-  <div v-else style="background: #00bcd4;width: 100%;height: 100%">
+  <div v-else style="background: #ffffff;position: fixed;height: 100%;width: 100%;display: flex;top:10px">
+    <img src="/static/icon/img_launch.jpg" style="width: 100%;height: 100%" />
   </div>
 </template>
 
@@ -179,5 +179,13 @@
     text-align: center;
     border-radius: 50px;
     position: relative;
+  }
+  .authButton{
+    width: 580rpx;
+    height: 84rpx;
+    line-height: 84rpx;
+    text-align: center;
+    background: #00bcd4;
+    color: #ffffff
   }
 </style>
