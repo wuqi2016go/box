@@ -149,7 +149,7 @@
             <Avatar :imageurl="person.imageurl" iclass="d_p_avatar" online="true" borderline="true"></Avatar>
           </div>
           <div v-else>
-            <input type="text" placeholder="请选择" readonly="true" style="height: 60rpx" />
+            <input type="text" placeholder="请选择" readonly="true" disabled="disabled" style="height: 60rpx" />
           </div>
         </div>
         <div class="weui-cell__hd weui-cell__ft_in-access">{{ person.pname }}</div>
@@ -157,7 +157,7 @@
     </div>
 
     <div class="button-sp-area">
-      <button class="weui-btn" style="background: #00bcd4;color: #ffffff" @click="devupdate">确定</button>
+      <button class="weui-btn" style="background: #00bcd4;color: #ffffff" @click="devupdate">提交</button>
     </div>
 
   </div>
@@ -212,6 +212,7 @@
               duration: 1500
             })
             dev.person = this.person
+            dev.online?dev.color = 'green':dev.color = 'grey'
             wx.setStorageSync('devdata', dev)
             // setTimeout(_ => {
             //   wx.navigateBack()

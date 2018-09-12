@@ -11,7 +11,7 @@
       <div v-else>请升级微信版本</div>
     </div>
   </div>
-  <div v-else style="background: #ffffff;position: fixed;height: 100%;width: 100%;display: flex;top:10px">
+  <div v-else style="background: #ffffff;position: fixed;height: 100%;width: 100%;display: flex;">
     <img src="/static/icon/img_launch.jpg" style="width: 100%;height: 100%" />
   </div>
 </template>
@@ -37,6 +37,7 @@
       },
       methods: {
         bindGetUserInfo () {
+          wx.showNavigationBarLoading()
           var _this = this
           wx.login({
             success: res => {
@@ -82,10 +83,8 @@
               wx.setStorageSync('sessionId', res.header['Set-Cookie'])
               _this.user = res.data.data
               wx.setStorageSync('user', _this.user)
-              console.log(res.data)
               if (res.data.statusCode === 200) {
                 // 如果当前用户存在绑定盒子，直接跳转到首页；不存在则进行绑定
-                console.log('已经绑定')
                 wx.switchTab({
                   url: '/pages/box/home'
                 })
@@ -128,7 +127,7 @@
             success: res => {
               // 设置盒子后，更改session
               if (res.data.statusCode === 200) {
-                console.log('userbox')
+                wx.hideNavigationBarLoading()
                 wx.setStorageSync('sessionId', res.header['Set-Cookie'])
                 wx.switchTab({
                   url: '/pages/box/home'
@@ -159,9 +158,11 @@
           if (user) {
             let params = {'wxuuid': user.wxuuid, 'bmac': user.bmac}
             api.post('/login/wechat', params, null, r => {
-              wx.switchTab({
-                url: '/pages/box/home'
-              })
+              setTimeout(_ => {
+                wx.switchTab({
+                  url: '/pages/box/home'
+                })
+              }, 1000)
             })
           } else {
             this.bmac = ''

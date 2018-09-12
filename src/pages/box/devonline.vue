@@ -90,32 +90,12 @@
           devIndex: ''
         }
       },
-      created () {
-      },
-      onLoad () {
-        this.getData()
-      },
       onShow () {
-        let dev = wx.getStorageSync('devdata')
-        if (dev) {
-          wx.removeStorageSync('devdata')
-          if (this.type === 0) {
-            this.devNoPid[this.devIndex] = dev
-          } else if (this.type === 1) {
-            this.devHasPid[this.devIndex] = dev
-          }
-          let _block = this.block
-          _block.forEach(function (v, k) {
-            if (v.did !== dev.did) {
-              _block.push(dev)
-            } else if (v.did === dev.did) {
-              _block[k] = v
-            }
-          })
-          if (_block.length === 0) { _block.push(dev) }
-          this.block = _block
-          wx.setStorageSync('block', _block)
-        }
+        wx.showNavigationBarLoading()
+        this.getData()
+        setTimeout(_ => {
+          wx.hideNavigationBarLoading()
+        }, 1000)
       },
       methods: {
         getData () {
@@ -172,12 +152,10 @@
       },
       async onPullDownRefresh () {
         wx.showNavigationBarLoading()
-        this.$api.setLoadding(false)
         this.getData()
         setTimeout(_ => {
           wx.hideNavigationBarLoading()
           wx.stopPullDownRefresh()
-          this.$api.setLoadding(true)
         }, 1500)
       }
     }

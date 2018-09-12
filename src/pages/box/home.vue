@@ -15,7 +15,7 @@
         </div>
         <div class="weui-panel__bd">
           <div class="weui-grids">
-            <div class="weui-grid" v-for="(p,index ) in person" :key="index">
+            <div class="weui-grid" v-for="(p,index ) in person" :key="p.pid">
               <i-avatar v-bind:src="p.imageurl" size="large" i-class="personavatar" @click="personinfo(index)"></i-avatar>
               <p class="weui-grid__label">{{ p.pname }}</p>
             </div>
@@ -32,7 +32,7 @@
         </div>
         <div class="weui-panel__bd">
           <div class="weui-grids">
-            <div v-for="(dev,index ) in devdata" class="weui-grid" @click="devdetail(index)" :key="index">
+            <div v-for="(dev,index ) in devdata" class="weui-grid" @click="devdetail(index)" :key="dev.did">
               <div class="pointDiv" :class="{'pidbackgroud':dev.pid==0}" style="border: 0px;">
                 <i class="iconfont iconcolor" v-if="dev.pid!=0" v-bind:class="{'icon-dev_android':dev.dtype==0,'icon-dev_iphone':dev.dtype==1,
                 'icon-dev_pad':dev.dtype==2,'icon-dev_pad1':dev.dtype==3, 'icon-dev_laptop':dev.dtype==4, 'icon-dev_laptop1':dev.dtype==5,
@@ -88,36 +88,19 @@
         noticeShow: false
       }
     },
-    onLoad () {
-      this.devonline()
-      this.persononline()
-      this.presentData()
+    onLoad(){
+      wx.showNavigationBarLoading()
+      setTimeout(_ => {
+        wx.hideNavigationBarLoading()
+      }, 1000)
     },
     onShow () {
       // 判断设备是否在线
       this.getBoxState()
 
-      // 判断设备时都处于阻断状态
-      let obj = wx.getStorageSync('block')
-      wx.removeStorageSync('block')
-      let _this = this
-      let index = _this.devIndex
-      // 如果是数组
-      if (obj instanceof Array) {
-        obj.forEach(function (v, k) {
-          _this.devdata.forEach(function (obj, index) {
-            if (v.dmac === obj.dmac) {
-              _this.devdata[index].blocking = v.blocking
-            }
-          })
-        })
-        return
-      }
-      // 如果是对象
-      if (obj instanceof Object) {
-        _this.devdata[index].blocking = obj.block
-        return
-      }
+      this.devonline()
+      this.persononline()
+      this.presentData()
     },
     methods: {
       devonline () {
@@ -199,14 +182,12 @@
     },
     async onPullDownRefresh () {
       wx.showNavigationBarLoading()
-      this.$api.setLoadding(false)
       this.devonline()
       this.persononline()
       this.presentData()
       setTimeout(_ => {
         wx.hideNavigationBarLoading()
         wx.stopPullDownRefresh()
-        this.$api.setLoadding(true)
       }, 1500)
     }
   }
@@ -223,9 +204,6 @@
   .weui-panel:after {
     bottom: 0;
     border-bottom: 0px;
-  }
-  .weui-panel{
-    margin-top: 10px;
   }
   .weui-panel__hd:after {
     border-bottom: 0px;

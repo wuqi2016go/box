@@ -1,11 +1,32 @@
 <template>
   <div class="page">
-    <i-swipeout operateWidth="60">
-      <view slot="content">
-        <i-cell :title="devdata.dname">
-          <label class="weui-media-box__desc" style="font-size: 20rpx">最近更新：{{devdata.lastTimeStr}}</label>
-          <label class="weui-media-box__desc" style="font-size: 20rpx">首次出现：{{devdata.firstTimeStr}}</label>
-          <div class="pointDiv" slot="icon">
+    <!--<i-swipeout operateWidth="60">-->
+      <!--<view slot="content">-->
+        <!--<i-cell :title="devdata.dname">-->
+          <!--<label class="weui-media-box__desc" style="font-size: 20rpx">最近更新：{{devdata.lastTimeStr}}</label>-->
+          <!--<label class="weui-media-box__desc" style="font-size: 20rpx">首次出现：{{devdata.firstTimeStr}}</label>-->
+          <!--<div class="pointDiv" slot="icon">-->
+            <!--<i class="iconfont" v-if="devdata.pid!=0" v-bind:class="{'icon-dev_android':devdata.dtype==0,'icon-dev_iphone':devdata.dtype==1,-->
+          <!--'icon-dev_pad':devdata.dtype==2,'icon-dev_pad1':devdata.dtype==3, 'icon-dev_laptop':devdata.dtype==4, 'icon-dev_laptop1':devdata.dtype==5,-->
+          <!--'icon-dev_taishiji':devdata.dtype==6, 'icon-dev_jiqiren':devdata.dtype==7,'icon-dev_home':devdata.dtype==8, 'icon-dev_tv':devdata.dtype==9,-->
+          <!--'iconcolor_green':devdata.color == 'green','iconcolor_grey':devdata.color == 'grey'}">-->
+              <!--<img v-if="devdata.blocking==1" src="/static/icon/jzsw.png" class="position" style="width: 32rpx;height: 32rpx" />-->
+            <!--</i>-->
+            <!--<i slot="icon" v-else :class="['iconfont','icon-dev_unknow',{'iconcolor_grey':devdata.color == 'grey','iconcolor_orange': devdata.color == 'orange'}]">-->
+              <!--<img v-if="devdata.blocking==1" src="/static/icon/jzsw.png" class="position" style="width: 32rpx;height: 32rpx" />-->
+            <!--</i>-->
+          <!--</div>-->
+        <!--</i-cell>-->
+      <!--</view>-->
+      <!--<view slot="button" class="i-swipeout-demo-button-group">-->
+        <!--<view class="i-swipeout-demo-button" style="width:60px;background: #ff8b03;" @click="devedit" :data-item='devdata' :data-index="0"><i class="iconfont icon-bianji" style="font-size: 28px"></i></view>-->
+      <!--</view>-->
+    <!--</i-swipeout>-->
+
+    <div class="weui-cells">
+      <div class="weui-cell" @click="devedit" :data-item='devdata'>
+        <div class="weui-cell__hd">
+          <div class="pointDiv">
             <i class="iconfont" v-if="devdata.pid!=0" v-bind:class="{'icon-dev_android':devdata.dtype==0,'icon-dev_iphone':devdata.dtype==1,
           'icon-dev_pad':devdata.dtype==2,'icon-dev_pad1':devdata.dtype==3, 'icon-dev_laptop':devdata.dtype==4, 'icon-dev_laptop1':devdata.dtype==5,
           'icon-dev_taishiji':devdata.dtype==6, 'icon-dev_jiqiren':devdata.dtype==7,'icon-dev_home':devdata.dtype==8, 'icon-dev_tv':devdata.dtype==9,
@@ -16,14 +37,19 @@
               <img v-if="devdata.blocking==1" src="/static/icon/jzsw.png" class="position" style="width: 32rpx;height: 32rpx" />
             </i>
           </div>
-        </i-cell>
-      </view>
-      <view slot="button" class="i-swipeout-demo-button-group">
-        <view class="i-swipeout-demo-button" style="width:60px;background: #ff8b03;" @click="devedit" :data-item='devdata' :data-index="0"><i class="iconfont icon-bianji" style="font-size: 28px"></i></view>
-      </view>
-    </i-swipeout>
+        </div>
+        <div class="weui-cell__bd">
+          <h4 class="weui-media-box__title">{{ devdata.dname}}</h4>
+          <label class="weui-media-box__desc" style="font-size: 20rpx">最近更新：{{devdata.lastTimeStr}}</label>
+          <label class="weui-media-box__desc" style="font-size: 20rpx">首次出现：{{devdata.firstTimeStr}}</label>
+        </div>
+        <div class="weui-cell__ft">
+          <i class="iconfont icon-bianji" style="font-size: 40rpx"></i>
+        </div>
+      </div>
+    </div>
 
-    <div class="weui-cells weui-cells_after-title weui-cells_form" style="padding: 20rpx 0rpx">
+    <div class="weui-cells weui-cells_form" style="padding: 20rpx 0rpx">
       <div class="weui-cell">
         <div class="weui-cell__hd">
           <label class="weui-label">IP地址</label>
@@ -123,14 +149,12 @@
         Avatar
       },
       onLoad () {
-        this.getLoadding()
+        wx.showNavigationBarLoading()
         setTimeout(_ => {
-          wx.hideLoading()
-          this.$api.setLoadding(true)
-        }, 200)
+          wx.hideNavigationBarLoading()
+        }, 500)
       },
       onShow () {
-        this.$api.setLoadding(false)
         this.devDetails()
       },
       methods: {

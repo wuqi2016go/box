@@ -37,8 +37,12 @@
         }
       },
       onShow () {
+        wx.showNavigationBarLoading()
         this.persononline()
         this.personoffline()
+        setTimeout(_ => {
+          wx.hideNavigationBarLoading()
+        }, 500)
       },
       methods: {
         persononline () {

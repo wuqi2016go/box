@@ -1,17 +1,7 @@
-// const baseUrl = 'https://192.168.168.149:8080/api/v1/app'
-// const baseUrl = 'https://116.62.223.98:8080/api/test/app'
 const baseUrl = 'https://www.hobox.com.cn:8080/api/test/app'
-// const baseUrl = '/api/v1/app'
-// const baseUrl = '';
 var loadding = true
 
 function apiAxios (method, url, params, editHeaders, success, failure) {
-  if (loadding) {
-    wx.showLoading({
-      title: '加载中',
-      mask: true
-    })
-  }
   let time = new Date().getTime()
   let sessionId = wx.getStorageSync('sessionId')
   let headers = Object.assign({}, { 'content-type': 'application/json;charset=utf-8', 'Cookie': sessionId })
@@ -30,9 +20,6 @@ function apiAxios (method, url, params, editHeaders, success, failure) {
           wx.setStorageSync('sessionId', res.header['Set-Cookie'])
         }
         if (res.data.statusCode === 200) {
-          if (loadding) {
-            wx.hideLoading()
-          }
           // 返回正常的数据
           success(res.data)
         } else {

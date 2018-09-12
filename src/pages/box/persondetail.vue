@@ -37,30 +37,30 @@
         <div class="weui-cell__ft weui-cell__ft_in-access"></div>
       </div>
     </div>
-    <div class="weui-cells">
-      <div class="weui-cell">
-        <div style="width: 15%; float: left;text-align: center;height: 40rpx;line-height: 40rpx" @click="prevActivity"><img src="/static/icon/left.png" style="width: 40rpx;height: 100%;" /></div>
-        <div style="width: 70%;float: left;text-align: center;font-size: 24rpx;">{{activityTitle}}</div>
-        <div style="width: 15%;float: left;text-align: center;height: 40rpx;line-height: 40rpx;" @click="nextActivity"><img src="/static/icon/right.png" style="width: 40rpx;height: 100%;" /></div>
-      </div>
-    </div>
-    <div class="weui-cells weui-cells_after-title">
-      <div class="weui-cell" style="padding: 5px 15px">
-        <div style="width: 82.2%;float: right;text-align: right;font-size: 20rpx;color: #999999">
-          活跃等级 (高到低)&nbsp;&nbsp;&nbsp;
-        </div>
-        <div style="width: 17.8%; float: right"><div class="div_title divs_5"></div> <div class="div_title divs_4"></div> <div class="div_title divs_3"></div><div class="div_title divs_2"></div><div class="div_title" style="background: #ebedf0"></div></div>
-      </div>
-      <div class="weui-cell">
-        <div style="float: left;width: 4%">
-          <div class="divs_week">一</div><div class="divs_week">二</div><div class="divs_week">三</div><div class="divs_week">四</div>
-          <div class="divs_week">五</div><div class="divs_week">六</div><div class="divs_week">日</div>
-        </div>
-        <div style="float: left;width: 96%">
-          <div :class="['divs_1',{'divs_2':div.present<=15 && div.present>0,'divs_3':div.present<=30 && div.present>15,'divs_4':div.present<=45&&div.present>30,'divs_5':div.present>45}]" v-for="(div,index) in divSizes" :key="index" :data-index="index"></div>
-        </div>
-      </div>
-    </div>
+    <!--<div class="weui-cells">-->
+      <!--<div class="weui-cell">-->
+        <!--<div style="width: 15%; float: left;text-align: center;height: 40rpx;line-height: 40rpx" @click="prevActivity"><img src="/static/icon/left.png" style="width: 40rpx;height: 100%;" /></div>-->
+        <!--<div style="width: 70%;float: left;text-align: center;font-size: 24rpx;">{{activityTitle}}</div>-->
+        <!--<div style="width: 15%;float: left;text-align: center;height: 40rpx;line-height: 40rpx;" @click="nextActivity"><img src="/static/icon/right.png" style="width: 40rpx;height: 100%;" /></div>-->
+      <!--</div>-->
+    <!--</div>-->
+    <!--<div class="weui-cells weui-cells_after-title">-->
+      <!--<div class="weui-cell" style="padding: 5px 15px">-->
+        <!--<div style="width: 82.2%;float: right;text-align: right;font-size: 20rpx;color: #999999">-->
+          <!--活跃等级 (高到低)&nbsp;&nbsp;&nbsp;-->
+        <!--</div>-->
+        <!--<div style="width: 17.8%; float: right"><div class="div_title divs_5"></div> <div class="div_title divs_4"></div> <div class="div_title divs_3"></div><div class="div_title divs_2"></div><div class="div_title" style="background: #ebedf0"></div></div>-->
+      <!--</div>-->
+      <!--<div class="weui-cell">-->
+        <!--<div style="float: left;width: 4%">-->
+          <!--<div class="divs_week">一</div><div class="divs_week">二</div><div class="divs_week">三</div><div class="divs_week">四</div>-->
+          <!--<div class="divs_week">五</div><div class="divs_week">六</div><div class="divs_week">日</div>-->
+        <!--</div>-->
+        <!--<div style="float: left;width: 96%">-->
+          <!--<div :class="['divs_1',{'divs_2':div.present<=15 && div.present>0,'divs_3':div.present<=30 && div.present>15,'divs_4':div.present<=45&&div.present>30,'divs_5':div.present>45}]" v-for="(div,index) in divSizes" :key="index" :data-index="index"></div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
   </div>
 </template>
 
@@ -186,7 +186,7 @@
           }
         })
         this.selected = item.did
-        this.getActivity()
+        // this.getActivity()
       },
       getActivity () {
         let starttime = new Date(this.MondayTime).setHours(0, 0, 0, 0) / 1000

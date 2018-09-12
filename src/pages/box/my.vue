@@ -87,13 +87,13 @@
       </div>
 
       <!--取消退出登录-->
-      <!--<div class="weui-cells weui-cells_after-title">-->
-        <!--<div class="weui-cell">-->
-          <!--<div class="weui-cell__bd" @click="loginOut" style="height: 60rpx;line-height: 60rpx">-->
-            <!--<h4 class="weui-media-box__title" style="color: #e9392a;text-align: center">退出登录</h4>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
+      <div class="weui-cells weui-cells_after-title">
+        <div class="weui-cell">
+          <div class="weui-cell__bd" @click="loginOut" style="height: 60rpx;line-height: 60rpx">
+            <h4 class="weui-media-box__title" style="color: #e9392a;text-align: center">退出登录</h4>
+          </div>
+        </div>
+      </div>
 
     </div>
 </template>

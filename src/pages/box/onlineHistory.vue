@@ -1,6 +1,6 @@
 <template>
   <i-steps direction="vertical" i-class="mysteps">
-    <i-step :icon="item.dtypeStr" v-for="(item,index) in present" :key="index" :bgcolor="item.bg">
+    <i-step :icon="item.dtypeStr" v-for="(item,index) in present" :key="item.id" :bgcolor="item.bg">
       <view slot="title">
         {{item.pname}} / {{item.dname}}
       </view>
@@ -32,6 +32,7 @@
       },
       methods: {
         getPresent () {
+          wx.showNavigationBarLoading()
           this.$api.get('/present', {'dmac': this.dmac, 'limit': this.limit, 'offset': this.offset}, null, r => {
             let data = r.data
             let obj = {}
@@ -67,19 +68,18 @@
               }
               this.present.push(obj)
             }
+            wx.hideNavigationBarLoading()
           })
         }
       },
       async onPullDownRefresh () {
         wx.showNavigationBarLoading()
-        this.$api.setLoadding(false)
         this.offset = 0
         this.present = []
         this.getPresent()
         setTimeout(_ => {
           wx.hideNavigationBarLoading()
           wx.stopPullDownRefresh()
-          this.$api.setLoadding(true)
         }, 1500)
       },
       onReachBottom () {

@@ -51,7 +51,6 @@
       onShow () {
         let uicon = wx.getStorageSync('uicon')
         if (typeof uicon === 'number') {
-          wx.removeStorageSync('uicon')
           this.person.pimage = uicon
         }
         this.person['imageurl'] = this.$api.ImgName(uicon)
@@ -59,7 +58,7 @@
       methods: {
         add () {
           this.$api.post('/person', this.person, null, r => {
-            wx.removeStorageSync('updateUser')
+            wx.removeStorageSync('uicon')
             wx.showToast({
               title: '已完成',
               icon: 'success',

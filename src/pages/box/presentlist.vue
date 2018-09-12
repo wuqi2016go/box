@@ -56,6 +56,12 @@
         Calendar,
         Avatar
       },
+      onLoad(){
+        wx.showNavigationBarLoading()
+        setTimeout(_ => {
+          wx.hideNavigationBarLoading()
+        }, 1000)
+      },
       onShow(){
         let data = this.$api.formatDate('yyyy-MM-dd',new Date());
         this.selectDate = data

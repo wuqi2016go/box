@@ -14,6 +14,9 @@ Vue.prototype.getLoadding = function () {
     title: '加载中'
   })
 }
+Vue.prototype.closeLoadding = function () {
+  wx.hideLoading()
+}
 
 export default {
   // 这个字段走 app.json
@@ -35,7 +38,7 @@ export default {
       list: [
         {
           pagePath: 'pages/box/home',
-          text: '动态',
+          text: '主页',
           iconPath: 'static/icon/tabbar1_0.png',
           selectedIconPath: 'static/icon/tabbar1_1.png'
         },

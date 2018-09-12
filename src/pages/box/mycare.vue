@@ -62,7 +62,7 @@
 
     <div style="background: #f7f7f7;height: 20rpx"></div>
     <div class="weui-media-box__title">
-      <div style="margin: 0 auto">最近24小时活跃度
+      <div style="margin: 0 auto">最近活跃度
         <div class="title">
           <div style="background: #ed3f14;height: 22rpx;width: 22rpx;margin: 18rpx 4rpx"></div>
           <div>游戏</div>
