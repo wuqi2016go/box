@@ -95,12 +95,13 @@
       }, 1000)
     },
     onShow () {
-      // 判断设备是否在线
-      this.getBoxState()
-
       this.devonline()
       this.persononline()
       this.presentData()
+      setTimeout(_ => {
+        // 判断设备是否在线
+        this.getBoxState()
+      }, 1000)
     },
     methods: {
       devonline () {
@@ -159,7 +160,9 @@
       },
       getBoxState () {
         let user = wx.getStorageSync('user')
-        user.box.bstatus === 0?this.noticeShow = true:this.noticeShow = false
+        this.$api.get('/box/all',{'bmac':user['box'].bmac},null,r =>{
+          r.data[0].bstatus === 0?this.noticeShow = true:this.noticeShow = false
+        })
       },
       personinfo (index) {
         let person = this.person[index]

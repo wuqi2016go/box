@@ -4,8 +4,8 @@
       <radio-group @change="checkboxChange">
         <label class="weui-cell weui-check__label" v-for="item in box" :key="index">
           <radio class="weui-check" :value="item.bid" :checked="item.checked" />
-          <div class="weui-cell__bd">
-            <h4 class="weui-media-box__title">路由器：{{item.essid}}</h4>
+          <div class="weui-cell__bd" style="margin-left: 0px;width: 80%">
+            <h4 class="weui-media-box__title" style="width: 100%">路由器：{{item.essid}}</h4>
             <p class="weui-media-box__desc">序列号：{{item.bmac}}</p>
           </div>
           <div class="weui-cell__ft weui-check__hd_in-checkbox">

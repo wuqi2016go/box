@@ -1,11 +1,10 @@
 <template>
-  <div class="page" v-if="bmac== ''">
+  <div class="page" v-if="show">
     <div class="pointDiv">
       <open-data type="userAvatarUrl"></open-data>
       <open-data type="userNickName"></open-data>
     </div>
     <!-- 需要使用 button 来授权登录 -->
-
     <div>
       <button v-if="canIUse"  open-type="getUserInfo" @click="bindGetUserInfo" class="weui-btn authButton">授权登录</button>
       <div v-else>请升级微信版本</div>
@@ -23,21 +22,29 @@
       data () {
         return {
           canIUse: wx.canIUse('button.open-type.getUserInfo'),
-          bmac: 0
+          code:'',
+          unionid:'',
+          user:{},
+          loginType:0,
+          show:false
         }
       },
       onShow () {
-        let user = wx.getStorageSync('user')
-        if (user.bmac) {
-          this.bmac = user.bmac
-          this.bmaclogin()
-        } else {
-          this.bmac = ''
+        let type = this.$root.$mp.query.type
+        type?this.loginType = parseInt(type):0
+        if(this.loginType==0){
+          let user = wx.getStorageSync('user')
+          if(user){
+            this.wxlogin({'wxuuid': user.wxuuid,'bmac':user['box'].bmac})
+          }else{
+            this.bindGetUserInfo()
+          }
+        }else if(this.loginType===2){
+          this.show = true
         }
       },
       methods: {
         bindGetUserInfo () {
-          wx.showNavigationBarLoading()
           var _this = this
           wx.login({
             success: res => {
@@ -46,6 +53,9 @@
               wx.getSetting({
                 success: function (res) {
                   if (res.authSetting['scope.userInfo']) {
+                    wx.showLoading({
+                      title: '登陆中'
+                    })
                     // 已经授权，可以直接调用 getUserInfo 获取头像昵称
                     wx.getUserInfo({
                       success: function (res) {
@@ -57,8 +67,10 @@
                             // console.log(r)
                             let obj = r.data
                             if (obj.unionid) {
-                              let params = {'wxuuid': obj.unionid}
-                              _this.wxlogin(params)
+                              _this.unionid = obj.unionid
+                              if(_this.loginType === 2){
+                                _this.wxlogin({'wxuuid': _this.unionid})
+                              }else{_this.unionidlogin()}
                             }
                           },
                           fail: err => {
@@ -67,6 +79,8 @@
                         })
                       }
                     })
+                  }else{
+                    _this.show = true
                   }
                 }
               })
@@ -85,9 +99,12 @@
               wx.setStorageSync('user', _this.user)
               if (res.data.statusCode === 200) {
                 // 如果当前用户存在绑定盒子，直接跳转到首页；不存在则进行绑定
-                wx.switchTab({
-                  url: '/pages/box/home'
-                })
+                setTimeout(_ => {
+                  wx.switchTab({
+                    url: '/pages/box/home'
+                  })
+                }, 1000)
+
               } else {
                 wx.startWifi({
                   success: function (res) {
@@ -152,21 +169,19 @@
             wx.setStorageSync('user', this.user)
           })
         },
-        bmaclogin () {
-          let user = wx.getStorageSync('user')
-          // user['bmac'] = 1026211971096
-          if (user) {
-            let params = {'wxuuid': user.wxuuid, 'bmac': user.bmac}
-            api.post('/login/wechat', params, null, r => {
-              setTimeout(_ => {
-                wx.switchTab({
-                  url: '/pages/box/home'
-                })
-              }, 1000)
-            })
-          } else {
-            this.bmac = ''
-          }
+        unionidlogin () {
+          wx.request({
+            url: baseUrl + '/usr/'+ this.unionid,
+            method: 'GET',
+            success: r => {
+              if(r.data.data){
+                let user = r.data.data
+                this.wxlogin({'wxuuid': this.unionid,'bmac':user['box'].bmac})
+              }else{
+                this.wxlogin({'wxuuid': this.unionid})
+              }
+            }
+          })
         }
       }
     }

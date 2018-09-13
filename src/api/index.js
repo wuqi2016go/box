@@ -27,13 +27,13 @@ function apiAxios (method, url, params, editHeaders, success, failure) {
             wx.showToast({
               title: res.data.message,
               icon: 'none',
-              duration: 2000
+              duration: 3000
             })
           } else {
             wx.showToast({
               title: '操作失败',
               icon: 'none',
-              duration: 2000
+              duration: 3000
             })
           }
         }

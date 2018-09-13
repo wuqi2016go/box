@@ -2,7 +2,7 @@ module.exports = [
   {
     path: '/pages/box/authorization',
     config: {
-      navigationBarTitleText: '授权',
+      navigationBarTitleText: '',
       usingComponents: {
         'i-avatar': '../../iView/avatar/index'
       }

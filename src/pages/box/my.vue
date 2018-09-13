@@ -135,7 +135,7 @@
         loginOut () {
           wx.clearStorage()
           wx.redirectTo({
-            url: '/pages/box/authorization'
+            url: '/pages/box/authorization?type=2'
           })
         }
       }
