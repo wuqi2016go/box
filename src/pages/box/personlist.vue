@@ -23,7 +23,7 @@
         </div>
       </div>
       <div class="right-icon" @click="personAdd">
-        <i class="iconfont icon-addcontacts" style="font-size: 3em;color: #15C2BC;"></i>
+        <i class="iconfont icon-addcontacts" style="font-size: 90rpx;color: #15C2BC;"></i>
       </div>
     </div>
 </template>

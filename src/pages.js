@@ -51,7 +51,7 @@ module.exports = [
   }, {
     path: '/pages/box/devonline',
     config: {
-      navigationBarTitleText: '在线设备',
+      navigationBarTitleText: '设备列表',
       enablePullDownRefresh: true
     }
   }, {
@@ -169,6 +169,16 @@ module.exports = [
         "i-collapse": "../../iView/collapse/index",
         "i-collapse-item": "../../iView/collapse-item/index"
       }
+    }
+  }, {
+    path: '/pages/box/protocol',
+    config: {
+      navigationBarTitleText: '用户协议',
+    }
+  }, {
+    path: '/pages/box/questions',
+    config: {
+      navigationBarTitleText: '常见问题',
     }
   }
 ]

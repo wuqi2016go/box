@@ -1,7 +1,7 @@
 <template>
   <div class="page">
 
-    <i-notice-bar v-if="noticeShow" icon="systemprompt" loop speed="2000" closable>
+    <i-notice-bar v-if="noticeShow" icon="systemprompt" loop speed="2000">
       家小盒离线，请检查供电及网络情况
     </i-notice-bar>
     <div class="weui-tab__bd">
@@ -191,6 +191,7 @@
       setTimeout(_ => {
         wx.hideNavigationBarLoading()
         wx.stopPullDownRefresh()
+        this.getBoxState()
       }, 1500)
     }
   }

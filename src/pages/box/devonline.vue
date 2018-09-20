@@ -13,25 +13,20 @@
         </div>
         <div class="weui-cell__bd">
           <div class="weui-media-box__title">
-            <div class="weui-flex">
-              <div class="weui-flex__item">
-                <p class="texthiden" v-if="dev.dname !=''">{{ dev.dname }}</p>
-                <p class="texthiden" v-else-if="dev.hostname !=''">{{ dev.hostname }}</p>
-                <p class="texthiden" v-else-if="dev.netbios !=''">{{ dev.netbios }}</p>
-                <p class="texthiden" v-else-if="dev.oui !=''">{{ dev.oui }}</p>
-              </div>
-              <div class="weui-flex__item">
-                <p class="texthiden">{{ dev.vendor }}</p>
-              </div>
+            <div class="weui-flex__item">
+              <p class="texthiden" v-if="dev.dname !=''">{{ dev.dname }}</p>
+              <p class="texthiden" v-else-if="dev.hostname !=''">{{ dev.hostname }}</p>
+              <p class="texthiden" v-else-if="dev.netbios !=''">{{ dev.netbios }}</p>
+              <p class="texthiden" v-else-if="dev.oui !=''">{{ dev.oui }}</p>
             </div>
           </div>
           <div class="weui-media-box__desc">
             <div class="weui-flex">
               <div class="weui-flex__item">
-                <p>{{dev.devip}}</p>
+                <p>{{ dev.mac }}</p>
               </div>
               <div class="weui-flex__item">
-                <p>{{ dev.mac }}</p>
+                <p>{{dev.lastTimeStr}}</p>
               </div>
             </div>
           </div>
@@ -50,25 +45,20 @@
         </div>
         <div class="weui-cell__bd">
           <div class="weui-media-box__title">
-            <div class="weui-flex">
-              <div class="weui-flex__item">
-                <p class="texthiden" v-if="item.dname !=''">{{ item.dname }}</p>
-                <p class="texthiden" v-else-if="item.hostname !=''">{{ item.hostname }}</p>
-                <p class="texthiden" v-else-if="item.netbios !=''">{{ item.netbios }}</p>
-                <p class="texthiden" v-else-if="item.oui !=''">{{ item.oui }}</p>
-              </div>
-              <div class="weui-flex__item">
-                <p class="texthiden">{{ item.vendor }}</p>
-              </div>
+            <div class="weui-flex__item">
+              <p class="texthiden" v-if="item.dname !=''">{{ item.dname }}</p>
+              <p class="texthiden" v-else-if="item.hostname !=''">{{ item.hostname }}</p>
+              <p class="texthiden" v-else-if="item.netbios !=''">{{ item.netbios }}</p>
+              <p class="texthiden" v-else-if="item.oui !=''">{{ item.oui }}</p>
             </div>
           </div>
           <div class="weui-media-box__desc">
             <div class="weui-flex">
               <div class="weui-flex__item">
-                <p>{{item.devip}}</p>
+                <p>{{ item.mac }}</p>
               </div>
               <div class="weui-flex__item">
-                <p>{{ item.mac }}</p>
+                <p>{{item.lastTimeStr}}</p>
               </div>
             </div>
           </div>
@@ -104,8 +94,11 @@
             let offline = []
             let nopidOnline = []
             let nopidOffline = []
+            let _this = this
             r.data.forEach(function (v, k) {
-              v['mac'] = v.dmac.toString(16)
+              v['mac'] = _this.$api.ToMac(v.dmac)
+              v['firstTimeStr'] = _this.$api.formatDate('yyyy-MM-dd hh:mm:ss', new Date(v.firsttime * 1000))
+              v['lastTimeStr'] = _this.$api.formatDate('yyyy-MM-dd hh:mm:ss', new Date(v.lasttime * 1000))
               if (v.pid > 0) {
                 if (v.online) {
                   v['color'] = 'green'
@@ -139,8 +132,8 @@
             this.type = 1
           }
           this.devIndex = index
-          dev['firstTimeStr'] = this.$api.formatDate('yyyy-MM-dd hh:mm:ss', new Date(dev.firsttime * 1000))
-          dev['lastTimeStr'] = this.$api.formatDate('yyyy-MM-dd hh:mm:ss', new Date(dev.lasttime * 1000))
+          // dev['firstTimeStr'] = this.$api.formatDate('yyyy-MM-dd hh:mm:ss', new Date(dev.firsttime * 1000))
+          // dev['lastTimeStr'] = this.$api.formatDate('yyyy-MM-dd hh:mm:ss', new Date(dev.lasttime * 1000))
           if (dev.person) {
             dev.person['imageurl'] = this.$api.ImgName(dev.person.pimage)
           }
@@ -238,6 +231,5 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 250rpx
   }
 </style>

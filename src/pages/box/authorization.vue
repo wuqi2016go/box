@@ -96,8 +96,8 @@
             success: res => {
               wx.setStorageSync('sessionId', res.header['Set-Cookie'])
               _this.user = res.data.data
-              wx.setStorageSync('user', _this.user)
               if (res.data.statusCode === 200) {
+                wx.setStorageSync('user', _this.user)
                 // 如果当前用户存在绑定盒子，直接跳转到首页；不存在则进行绑定
                 setTimeout(_ => {
                   wx.switchTab({
@@ -114,7 +114,7 @@
                       },
                       fail: err => {
                         wx.showToast({
-                          title: '请确认开启WIFI：' + err.errCode,
+                          title: '请确认设备是否连接到带有家小盒的无线网络',
                           icon: 'none',
                           duration: 3000
                         })
@@ -144,6 +144,7 @@
             success: res => {
               // 设置盒子后，更改session
               if (res.data.statusCode === 200) {
+                wx.setStorageSync('user', this.user)
                 wx.hideNavigationBarLoading()
                 wx.setStorageSync('sessionId', res.header['Set-Cookie'])
                 wx.switchTab({
@@ -165,8 +166,7 @@
           api.post('/box/wxbind', {'ssid': wifi.SSID, 'bssid': parseInt(bssid, 16)}, null, r => {
             this.user['box'] = r.data
             this.setbox(r.data)
-            this.user['bmac'] = r.data.bmac
-            wx.setStorageSync('user', this.user)
+            // this.user['bmac'] = r.data.bmac
           })
         },
         unionidlogin () {
@@ -174,7 +174,7 @@
             url: baseUrl + '/usr/'+ this.unionid,
             method: 'GET',
             success: r => {
-              if(r.data.data){
+              if(r.data.data && r.data.data['box']){
                 let user = r.data.data
                 this.wxlogin({'wxuuid': this.unionid,'bmac':user['box'].bmac})
               }else{

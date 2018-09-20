@@ -71,8 +71,19 @@ const FmtTime = (date, fmt) => {
 
 const ToMac = (dmac) => {
   if (!dmac) return
-  let mac = dmac.toString(16)
-  return mac
+  // dmac = (Array(14).join('0') + dmac).slice(-14);
+  let mac = dmac.toString(16).toUpperCase()
+  if(mac.length<12){
+    mac = (Array(12).join('0') + mac).slice(-12);
+  }
+  var result = ''
+  result = result + mac.substring(0, 2) + '-'
+  result = result + mac.substring(2, 4) + '-'
+  result = result + mac.substring(4, 6) + '-'
+  result = result + mac.substring(6, 8) + '-'
+  result = result + mac.substring(8, 10) + '-'
+  result = result + mac.substring(10, 12)
+  return result
 }
 
 const ImgName = (pimage) => {

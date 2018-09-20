@@ -66,6 +66,17 @@
           }
         }
       },
+      onLoad(options){
+        if(options.plan){
+          wx.setNavigationBarTitle({
+            title: "修改计划"//页面标题为路由参数
+          })
+        }else{
+          wx.setNavigationBarTitle({
+            title: "新增计划"//页面标题为路由参数
+          })
+        }
+      },
       onShow () {
         this.plan = this.$options.data().plan
         let obj = this.$root.$mp.query.plan

@@ -62,15 +62,14 @@
 
     <div style="background: #f7f7f7;height: 20rpx"></div>
     <div class="weui-media-box__title">
-      <div style="margin: 0 auto">最近活跃度
-        <div class="title">
-          <div style="background: #ed3f14;height: 22rpx;width: 22rpx;margin: 18rpx 4rpx"></div>
-          <div>游戏</div>
-          <div style="background: #ff9920;height: 22rpx;width: 22rpx;margin: 18rpx 4rpx"></div>
-          <div>视频</div>
-          <div style="background: #00bcd4;height: 22rpx;width: 22rpx;margin: 18rpx 4rpx"></div>
-          <div>其他</div>
-        </div>
+      <div style="width: 100%;height: 60rpx;text-align: center">最近活跃度</div>
+      <div class="title">
+        <div style="background: #ed3f14;height: 22rpx;width: 22rpx;margin: 18rpx 4rpx"></div>
+        <div>游戏</div>
+        <div style="background: #ff9920;height: 22rpx;width: 22rpx;margin: 18rpx 4rpx"></div>
+        <div>视频</div>
+        <div style="background: #00bcd4;height: 22rpx;width: 22rpx;margin: 18rpx 4rpx"></div>
+        <div>其他</div>
       </div>
 
     </div>
@@ -443,6 +442,7 @@
   .weui-media-box__title{
     height: 60rpx; text-align: center; line-height: 60rpx;
     border-bottom: 2px solid #eeeeee;
+    position: relative;
   }
   .slide-box{
     display: -webkit-box;
@@ -495,11 +495,13 @@
     margin: 80rpx auto;
   }
   .title{
-    float: right;
     height: 60rpx;
     line-height: 60rpx;
     font-size: 22rpx;
-    margin-right: 10rpx;
+    position: absolute;
+    top: 0px;
+    z-index: 9999;
+    right: 20rpx;
   }
   .title div{
     float: left;

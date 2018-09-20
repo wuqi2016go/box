@@ -21,7 +21,7 @@
               <div class="weui-grid__label">盒子管理</div>
             </div>
             <div class="weui-grid" @click="goSwjh">
-              <img class="weui-grid__icon my_detail" src="/static/icon/jzsw.png" />
+              <img class="weui-grid__icon my_detail" src="/static/icon/swjh.png" />
               <div class="weui-grid__label">上网计划</div>
             </div>
           </block>
@@ -46,8 +46,8 @@
             <img src="/static/icon/bzfk.png" class="my_img" />
             </div>
           </div>
-          <div class="weui-cell__bd">
-            <h4 class="weui-media-box__title">帮助反馈</h4>
+          <div class="weui-cell__bd" @click="goQuestions">
+            <h4 class="weui-media-box__title">常见问题</h4>
           </div>
           <div class="weui-cell__ft weui-cell__ft_in-access"></div>
         </div>
@@ -68,7 +68,7 @@
             <img src="/static/icon/gywm.png" class="my_img" />
             </div>
           </div>
-          <div class="weui-cell__bd">
+          <div class="weui-cell__bd" @click="goProtocol">
             <h4 class="weui-media-box__title">关于我们</h4>
           </div>
           <div class="weui-cell__ft weui-cell__ft_in-access"></div>
@@ -130,6 +130,16 @@
         goAccount(){
           wx.navigateTo({
             url: '/pages/box/account'
+          })
+        },
+        goProtocol(){
+          wx.navigateTo({
+            url: '/pages/box/protocol'
+          })
+        },
+        goQuestions(){
+          wx.navigateTo({
+            url: '/pages/box/questions'
           })
         },
         loginOut () {

@@ -44,24 +44,16 @@
           <label class="weui-media-box__desc" style="font-size: 20rpx">首次出现：{{devdata.firstTimeStr}}</label>
         </div>
         <div class="weui-cell__ft">
-          <i class="iconfont icon-bianji" style="font-size: 40rpx"></i>
+          <i class="iconfont icon-bianji" style="font-size: 50rpx"></i>
         </div>
       </div>
     </div>
 
     <div class="weui-cells weui-cells_form" style="padding: 20rpx 0rpx">
       <div class="weui-cell">
-        <div class="weui-cell__hd">
-          <label class="weui-label">IP地址</label>
-        </div>
+        <div class="weui-cell__hd"><label  class="weui-label">主机名</label></div>
         <div class="weui-cell__bd">
-          {{ devdata.devip }}
-        </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__hd"><label class="weui-label">MAC地址</label></div>
-        <div class="weui-cell__bd">
-          {{ devdata.mac }}
+          {{ devdata.hostname }}
         </div>
       </div>
       <div class="weui-cell">
@@ -71,15 +63,17 @@
         </div>
       </div>
       <div class="weui-cell">
-        <div class="weui-cell__hd"><label  class="weui-label">主机名</label></div>
+        <div class="weui-cell__hd"><label class="weui-label">MAC地址</label></div>
         <div class="weui-cell__bd">
-          {{ devdata.hostname }}
+          {{ devdata.mac }}
         </div>
       </div>
       <div class="weui-cell">
-        <div class="weui-cell__hd"><label  class="weui-label">NetBIOS名称</label></div>
+        <div class="weui-cell__hd">
+          <label class="weui-label">IP地址</label>
+        </div>
         <div class="weui-cell__bd">
-          {{ devdata.netbios }}
+          {{ devdata.devip }}
         </div>
       </div>
     </div>
@@ -107,7 +101,7 @@
     <div v-if="plan.length > 0">
       <i-swipeout v-for="(p,index) in plan"  :key="p.pid" operateWidth="120">
         <view slot="content">
-          <i-cell title="限网计划">
+          <i-cell title="上网计划">
             <label slot="footer" style="color: #ff9920;">{{p.ptypeStr}}&nbsp;&nbsp;&nbsp;{{p.starttimeStr}}~{{p.endtimeStr}}</label>
           </i-cell>
         </view>
@@ -120,7 +114,7 @@
 
     <div class="weui-cells weui-cells_after-title" v-else>
       <div class="weui-cell">
-        <div class="weui-cell__bd" style="text-align: center;color: #999999">暂无阻断计划</div>
+        <div class="weui-cell__bd" style="text-align: center;color: #999999">暂无上网计划</div>
       </div>
     </div>
 
