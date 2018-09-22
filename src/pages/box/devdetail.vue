@@ -59,7 +59,7 @@
       <div class="weui-cell">
         <div class="weui-cell__hd"><label  class="weui-label">设备厂商</label></div>
         <div class="weui-cell__bd">
-          {{ devdata.vendor }}
+          {{ devdata.oui }}
         </div>
       </div>
       <div class="weui-cell">

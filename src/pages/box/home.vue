@@ -63,7 +63,8 @@
               <i-avatar v-if="present.onoff == 1" v-bind:src="present.imageurl" size="large" i-class="personavatar"></i-avatar>
             </div>
             <div class="weui-cell__bd">
-              <h4 class="weui-media-box__title">{{ present.pname}}[{{ present.dname}}]</h4>
+              <!--* 优先级 dname > hostname > netbios > oui-->
+              <h4 class="weui-media-box__title" v-if="present.dname!=''">{{ present.pname}}[{{ present.dname}}]</h4>
               <p class="weui-media-box__desc" v-if="present.onoff === 1">{{ present.timeStr }}上线</p>
               <p class="weui-media-box__desc" v-else>{{ present.timeStr }}下线</p>
             </div>
@@ -131,6 +132,18 @@
             } else {
               _present['imageurl'] = api.ImgName(_present.pimage)
             }
+            if(!_present.dname){
+              api.get('/dev/'+_present.dmac,null,null,r=>{
+                let dev = r.data
+                if(dev.hostname){
+                  _present.dname = dev.hostname
+                }else if(dev.netbios){
+                  _present.dname = dev.netbios
+                }else{
+                  _present.dname = dev.oui
+                }
+              })
+            }
             this.present = _present
           }
         })
@@ -148,6 +161,7 @@
         } else if (dev.pid === 0) {
           dev['color'] = 'orange'
         }
+        dev['mac'] = this.$api.ToMac(dev.dmac)
         dev['firstTimeStr'] = api.formatDate('yyyy-MM-dd hh:mm:ss', new Date(dev.firsttime * 1000))
         dev['lastTimeStr'] = api.formatDate('yyyy-MM-dd hh:mm:ss', new Date(dev.lasttime * 1000))
         if (dev.person) {

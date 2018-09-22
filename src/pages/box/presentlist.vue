@@ -21,7 +21,7 @@
           <Avatar :pid="item.pid" :imageurl="item.imageurl" :online="item.onoff==1" :borderline="true" iclass="dev_avatar"></Avatar>
         </div>
         <div class="weui-cell__bd">
-          <h4 class="weui-media-box__title">{{ item.pname}}[{{ item.dname}}]</h4>
+          <h4 class="weui-media-box__title" v-if="item.dname!=''">{{ item.pname}}[{{ item.dname}}]</h4>
           <p class="weui-media-box__desc" v-if="item.onoff === 1">{{ item.timeStr }}上线</p>
           <p class="weui-media-box__desc" v-else>{{ item.timeStr }}下线</p>
         </div>
@@ -105,6 +105,18 @@
                 v['pimage'] = 100
               }
               v['imageurl'] = _this.$api.ImgName(v.pimage)
+              if(!v.dname){
+                _this.$api.get('/dev/'+v.dmac,null,null,r=>{
+                  let dev = r.data
+                  if(dev.hostname){
+                    v.dname = dev.hostname
+                  }else if(dev.netbios){
+                    v.dname = dev.netbios
+                  }else{
+                    v.dname = dev.oui
+                  }
+                })
+              }
             })
             this.present = _present
           })

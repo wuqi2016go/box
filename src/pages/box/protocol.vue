@@ -3,7 +3,7 @@
       <div style="margin: 30rpx 0rpx;width: 100%;text-align: center">
         <img src="/static/icon/ic_launch.png" style="width: 144rpx;height: 144rpx"/>
       </div>
-      <div style="text-align: center">家小盒&nbsp;V1.0.5</div>
+      <div style="text-align: center">家小盒&nbsp;V1.0.7</div>
       <div class="weui-media-box__desc" style="margin: 20rpx 30rpx;">家小盒&nbsp;(HOBOX) ---陪伴孩子的上网管家，帮助家长了解孩子的上网行为，管理孩子的上网时间，让孩子合理、健康的使用网络。</div>
       <div class="weui-cells">
         <div class="weui-cell">

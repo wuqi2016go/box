@@ -1,5 +1,5 @@
 <template>
-  <div class="page" v-if="person.pid">
+  <div class="page" v-if="show==1">
     <div class="page__bd">
       <div class="weui-grids">
         <block>
@@ -26,7 +26,7 @@
     <!--<div class="weui-media-box__title">{{person.pname}}的设备</div>-->
     <div class="weui-panel__bd">
       <div class="weui-media-box" style="padding: 0rpx 10rpx;">
-        <div class="slide-box">
+        <div class="slide-box" v-if="dev.length>0">
           <div class="slide-item" v-for="(item,index) in dev" :key="item.did">
             <div :class="['triangle_border_down',{'triangle_border_on':selected==item.dmac,'triangle_border_off':selected!=item.dmac}]"></div>
             <div :class="['pointDev',{'dev_online':item.online,'dev_offline': !item.online,'bordercolor':selected==item.dmac}]" @click="initChart(index)">
@@ -38,6 +38,7 @@
             <p class="weui-grid__label" style="color: #999999;margin-top: 0px;font-size: 22rpx">{{ item.dname }}</p>
           </div>
         </div>
+        <div style="text-align: center;padding: 30rpx" v-else>未添加设备</div>
       </div>
     </div>
 
@@ -77,11 +78,11 @@
       <mpvue-echarts :echarts="echarts" :onInit="handleInit" ref="echarts" />
     </div>
   </div>
-  <div v-else-if="show" style="margin-top: 200rpx;width: 100%;text-align: center">
+  <div v-else-if="show==2" style="margin-top: 200rpx;width: 100%;text-align: center">
     <img src="/static/icon/page_null.png" style="width: 330rpx;height: 330rpx" />
     <div class="addcare" @click="carePerson"><i class="iconfont icon-add">&nbsp;&nbsp;选择关注</i></div>
   </div>
-  <div v-else></div>
+  <div v-else-if="show==0"></div>
 </template>
 
 <script>
@@ -98,7 +99,6 @@
         dev: [],
         item:{},
         devSize: 0,
-        lastUpdate: '',
         selected: null,
         onlineS:0, // 当日累计在线时长
         percent_onlineS:0,
@@ -108,24 +108,24 @@
         percent_game:0,
         video:0, // 视频时长
         percent_video:0,
-        show:false
+        // 0 空白 1 有关注 2 无关注
+        show:0
       }
     },
     components: {
       mpvueEcharts,
       Avatar
     },
-    onLoad () {
-      this.getLoadding()
-    },
     onShow () {
-      this.$api.setLoadding(false)
+      wx.showNavigationBarLoading()
+      setTimeout(_ => {
+        wx.hideNavigationBarLoading()
+      }, 1000)
       let carePerson = wx.getStorageSync('careperson')
       if (carePerson) {
         carePerson.care = true
         this.person = carePerson
         wx.removeStorageSync('careperson')
-        this.$api.setLoadding(false)
         this.$api.put('/person/' + carePerson.pid + '/care', carePerson, null, r => {
           this.getDev()
           wx.showToast({
@@ -142,13 +142,14 @@
       getCare () {
         this.$api.get('/person-cared', null, null, r => {
           if (r.data) {
+            this.show=1
             r.data['imageurl'] = this.$api.ImgName(r.data['pimage'])
             this.person = r.data
             this.getDev()
           }else{
             // 若没有关注的人则取消加载
             wx.hideLoading()
-            this.show = true
+            this.show = 2
           }
         })
       },
@@ -158,10 +159,7 @@
           this.$api.get('/dev', {'pid': pid, 'order': 'lasttime'}, null, r => {
             this.dev = r.data
             this.devSize = r.total
-            this.lastUpdate = this.$api.formatDate('yyyy-MM-dd hh:mm:ss', new Date(r.data[0].lasttime * 1000))
-            if (this.dev.length > 0) {
-              this.initChart(0)
-            }
+            this.initChart(0)
           })
         }
       },
@@ -172,7 +170,7 @@
       },
       initChart (index) {
         let _this = this
-        let dmac = _this.dev[index].dmac
+        let dmac = _this.dev.length>0?_this.dev[index].dmac:0
         let now = new Date()
         let endtime = Date.parse(now)/1000 - now.getSeconds()
         let starttime = endtime - 60*60*24

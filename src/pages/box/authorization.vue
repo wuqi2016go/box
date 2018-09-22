@@ -30,18 +30,19 @@
         }
       },
       onShow () {
-        let type = this.$root.$mp.query.type
-        type?this.loginType = parseInt(type):0
-        if(this.loginType==0){
-          let user = wx.getStorageSync('user')
-          if(user){
-            this.wxlogin({'wxuuid': user.wxuuid,'bmac':user['box'].bmac})
-          }else{
-            this.bindGetUserInfo()
-          }
-        }else if(this.loginType===2){
-          this.show = true
-        }
+        // let type = this.$root.$mp.query.type
+        // type?this.loginType = parseInt(type):0
+        // if(this.loginType==0){
+        //   let user = wx.getStorageSync('user')
+        //   if(user){
+        //     this.wxlogin({'wxuuid': user.wxuuid,'bmac':user['box'].bmac})
+        //   }else{
+        //     this.bindGetUserInfo()
+        //   }
+        // }else if(this.loginType===2){
+        //   this.show = true
+        // }
+        this.bindGetUserInfo()
       },
       methods: {
         bindGetUserInfo () {
@@ -64,13 +65,9 @@
                           data: {'code': code, 'iv': res.iv, 'encryptedData': res.encryptedData},
                           method: 'POST',
                           success: r => {
-                            // console.log(r)
-                            let obj = r.data
-                            if (obj.unionid) {
-                              _this.unionid = obj.unionid
-                              if(_this.loginType === 2){
-                                _this.wxlogin({'wxuuid': _this.unionid})
-                              }else{_this.unionidlogin()}
+                            if (r.data.unionid) {
+                              _this.unionid = r.data.unionid
+                              _this.unionidlogin()
                             }
                           },
                           fail: err => {
@@ -110,6 +107,7 @@
                   success: function (res) {
                     wx.getConnectedWifi({
                       success: res => {
+                        console.log(res)
                         _this.wxbind(res.wifi)
                       },
                       fail: err => {
@@ -163,7 +161,8 @@
         wxbind (wifi) {
           let bssid = wifi.BSSID
           bssid = bssid.replace(/:/g, '')
-          api.post('/box/wxbind', {'ssid': wifi.SSID, 'bssid': parseInt(bssid, 16)}, null, r => {
+          // api.post('/box/wxbind', {'ssid': wifi.SSID, 'bssid': parseInt(bssid, 16)}, null, r => {
+          api.post('/box/wxbind', {'ssid': '', 'bssid': parseInt(bssid, 16)}, null, r => {
             this.user['box'] = r.data
             this.setbox(r.data)
             // this.user['bmac'] = r.data.bmac
