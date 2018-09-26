@@ -180,5 +180,10 @@ module.exports = [
     config: {
       navigationBarTitleText: '常见问题',
     }
+  }, {
+    path: '/pages/box/searchBox',
+    config: {
+      navigationBarTitleText: '发现家小盒',
+    }
   }
 ]

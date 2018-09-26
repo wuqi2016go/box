@@ -6,7 +6,7 @@
     </div>
     <!-- 需要使用 button 来授权登录 -->
     <div>
-      <button v-if="canIUse"  open-type="getUserInfo" @click="bindGetUserInfo" class="weui-btn authButton">授权登录</button>
+      <button v-if="canIUse"  open-type="getUserInfo" @click="bindGetUserInfo(2)" class="weui-btn authButton">授权登录</button>
       <div v-else>请升级微信版本</div>
     </div>
   </div>
@@ -30,22 +30,20 @@
         }
       },
       onShow () {
-        // let type = this.$root.$mp.query.type
-        // type?this.loginType = parseInt(type):0
-        // if(this.loginType==0){
-        //   let user = wx.getStorageSync('user')
-        //   if(user){
-        //     this.wxlogin({'wxuuid': user.wxuuid,'bmac':user['box'].bmac})
-        //   }else{
-        //     this.bindGetUserInfo()
-        //   }
-        // }else if(this.loginType===2){
-        //   this.show = true
-        // }
         this.bindGetUserInfo()
       },
       methods: {
-        bindGetUserInfo () {
+        bindGetUserInfo (type) {
+          // 如果第一次登陆
+          if(type===2){
+            wx.showLoading({
+              title: '登录中',
+              mask:true
+            })
+            setTimeout(_ => {
+              wx.hideLoading()
+            }, 1500)
+          }
           var _this = this
           wx.login({
             success: res => {
@@ -54,9 +52,6 @@
               wx.getSetting({
                 success: function (res) {
                   if (res.authSetting['scope.userInfo']) {
-                    wx.showLoading({
-                      title: '登陆中'
-                    })
                     // 已经授权，可以直接调用 getUserInfo 获取头像昵称
                     wx.getUserInfo({
                       success: function (res) {
@@ -143,7 +138,6 @@
               // 设置盒子后，更改session
               if (res.data.statusCode === 200) {
                 wx.setStorageSync('user', this.user)
-                wx.hideNavigationBarLoading()
                 wx.setStorageSync('sessionId', res.header['Set-Cookie'])
                 wx.switchTab({
                   url: '/pages/box/home'
@@ -161,8 +155,7 @@
         wxbind (wifi) {
           let bssid = wifi.BSSID
           bssid = bssid.replace(/:/g, '')
-          // api.post('/box/wxbind', {'ssid': wifi.SSID, 'bssid': parseInt(bssid, 16)}, null, r => {
-          api.post('/box/wxbind', {'ssid': '', 'bssid': parseInt(bssid, 16)}, null, r => {
+          api.post('/box/wxbind', {'ssid': wifi.SSID, 'bssid': parseInt(bssid, 16)}, null, r => {
             this.user['box'] = r.data
             this.setbox(r.data)
             // this.user['bmac'] = r.data.bmac

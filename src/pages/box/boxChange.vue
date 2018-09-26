@@ -1,12 +1,19 @@
 <template>
   <div class="page">
+    <!--<div class="weui-cells weui-cells_after-title" style="background: #00bcd4">-->
+      <!--<div class="weui-cell">-->
+        <!--<div class="weui-cell__bd"></div>-->
+        <!--<div class="weui-cell__ft"><i class="iconfont icon-addcontacts" style="font-size: 90rpx;color: #ffffff"></i></div>-->
+      <!--</div>-->
+    <!--</div>-->
     <div class="weui-cells">
       <radio-group @change="checkboxChange">
         <label class="weui-cell weui-check__label" v-for="item in box" :key="index">
           <radio class="weui-check" :value="item.bid" :checked="item.checked" />
           <div class="weui-cell__bd" style="margin-left: 0px;width: 80%">
             <h4 class="weui-media-box__title" style="width: 100%">路由器：{{item.essid}}</h4>
-            <p class="weui-media-box__desc">序列号：{{item.bmac}}</p>
+            <p class="weui-media-box__desc">路由器MAC地址：{{item.rmacStr}}</p>
+            <p class="weui-media-box__desc">盒子MAC地址：{{item.bmacStr}}</p>
           </div>
           <div class="weui-cell__ft weui-check__hd_in-checkbox">
             <icon class="weui-icon-checkbox_circle" type="circle" size="23" v-if="!item.checked"></icon>
@@ -14,6 +21,10 @@
           </div>
         </label>
       </radio-group>
+    </div>
+
+    <div class="right-icon" @click="searchBox">
+      <i class="iconfont icon-addcontacts" style="font-size: 90rpx;color: #15C2BC;"></i>
     </div>
   </div>
 </template>
@@ -44,6 +55,8 @@
               } else {
                 v['checked'] = false
               }
+              v['bmacStr'] = _this.$api.ToMac(v.bmac)
+              v['rmacStr'] = _this.$api.ToMac(v.rmac)
               boxlist.push(v)
             })
             _this.box = boxlist
@@ -57,7 +70,6 @@
             confirmText: '确认',
             cancelText: '取消',
             success: function (res) {
-              console.log(res)
               if (res.confirm) {
                 console.log('checkbox发生change事件，携带value值为：' + e.mp.detail.value)
                 let checkboxItems = _this.box
@@ -109,20 +121,24 @@
               }
             }
           })
+        },
+        searchBox(){
+          wx.navigateTo({
+            url: '/pages/box/searchBox'
+          })
         }
       }
     }
 </script>
 
 <style scoped>
-/*  :root .fa-rotate-45{
-    filter: none;
-  }
-  .fa-rotate-45 {
-    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-  }*/
-
+.weui-media-box__desc{
+  padding: 4rpx 0;
+}
+.right-icon{
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 999;
+}
 </style>

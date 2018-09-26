@@ -48,8 +48,8 @@
           </div>
         </div>
       </div>
-      <div class="weui-panel weui-panel_access">
-        <div class="weui-panel__hd" @click="presentmore">
+      <div class="weui-panel weui-panel_access" @click="presentmore">
+        <div class="weui-panel__hd">
           <div style="display: inline-block; vertical-align: middle">最近一次上线记录</div>
           <div style="float: right;height: 20px;width: 20px">
             <!--<img src="/static/icon/more.png" style="width: 100%;height: 100%"/>-->

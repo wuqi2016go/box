@@ -51,7 +51,7 @@
 
     <div class="weui-cells weui-cells_form" style="padding: 20rpx 0rpx">
       <div class="weui-cell">
-        <div class="weui-cell__hd"><label  class="weui-label">主机名</label></div>
+        <div class="weui-cell__hd"><label  class="weui-label">主机名称</label></div>
         <div class="weui-cell__bd">
           {{ devdata.hostname }}
         </div>

@@ -374,6 +374,7 @@
         }else{
           dev['color'] = 'grey'
         }
+        dev['mac'] = this.$api.ToMac(dev.dmac)
         dev['firstTimeStr'] = this.$api.formatDate('yyyy-MM-dd hh:mm:ss', new Date(dev.firsttime * 1000))
         dev['lastTimeStr'] = this.$api.formatDate('yyyy-MM-dd hh:mm:ss', new Date(dev.lasttime * 1000))
         dev.person = this.person

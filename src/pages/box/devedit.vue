@@ -2,11 +2,15 @@
   <div class="page">
     <div class="weui-cells  weui-cells_form" style="padding: 20rpx 0rpx">
       <div class="weui-cell">
-        <div class="weui-cell__hd">
-          <label class="weui-label">IP地址</label>
-        </div>
+        <div class="weui-cell__hd"><label  class="weui-label">主机名称</label></div>
         <div class="weui-cell__bd">
-          {{ devdata.devip }}
+          {{ devdata.hostname }}
+        </div>
+      </div>
+      <div class="weui-cell">
+        <div class="weui-cell__hd"><label  class="weui-label">设备厂商</label></div>
+        <div class="weui-cell__bd">
+          {{ devdata.oui }}
         </div>
       </div>
       <div class="weui-cell">
@@ -16,21 +20,11 @@
         </div>
       </div>
       <div class="weui-cell">
-        <div class="weui-cell__hd"><label  class="weui-label">设备厂商</label></div>
-        <div class="weui-cell__bd">
-          {{ devdata.vendor }}
+        <div class="weui-cell__hd">
+          <label class="weui-label">IP地址</label>
         </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__hd"><label  class="weui-label">主机名</label></div>
         <div class="weui-cell__bd">
-          {{ devdata.hostname }}
-        </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__hd"><label  class="weui-label">NetBIOS名称</label></div>
-        <div class="weui-cell__bd">
-          {{ devdata.netbios }}
+          {{ devdata.devip }}
         </div>
       </div>
     </div>

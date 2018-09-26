@@ -82,7 +82,7 @@
           <div class="weui-cell__bd">
             <h4 class="weui-media-box__title">版本号</h4>
           </div>
-          <div class="weui-cell__ft">V1.0.7</div>
+          <div class="weui-cell__ft">V1.0.8</div>
         </div>
       </div>
 
