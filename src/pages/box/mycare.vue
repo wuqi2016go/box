@@ -29,7 +29,7 @@
         <div class="slide-box" v-if="dev.length>0">
           <div class="slide-item" v-for="(item,index) in dev" :key="item.did">
             <div :class="['triangle_border_down',{'triangle_border_on':selected==item.dmac,'triangle_border_off':selected!=item.dmac}]"></div>
-            <div :class="['pointDev',{'dev_online':item.online,'dev_offline': !item.online,'bordercolor':selected==item.dmac}]" @click="initChart(index)">
+            <div :class="['pointDev',{'dev_online':item.online,'dev_offline': !item.online,'bordercolor':selected==item.dmac}]" @click="getData(index)">
               <i class="iconfont iconcolor" v-bind:class="{'icon-dev_android':item.dtype==0,'icon-dev_iphone':item.dtype==1,
                 'icon-dev_pad':item.dtype==2,'icon-dev_pad1':item.dtype==3, 'icon-dev_laptop':item.dtype==4, 'icon-dev_laptop1':item.dtype==5,
                 'icon-dev_taishiji':item.dtype==6, 'icon-dev_jiqiren':item.dtype==7,'icon-dev_home':item.dtype==8, 'icon-dev_tv':item.dtype==9}"></i>
@@ -74,9 +74,15 @@
       </div>
 
     </div>
-    <div class="wrap">
-      <mpvue-echarts :echarts="echarts" :onInit="handleInit" ref="echarts" />
+
+    <div style="width: 100%;height: 280rpx;position: relative">
+        <img :src="arrowLeft" style="width: 50rpx;height: 50rpx;position: absolute;z-index: 999999999;left: 20rpx;top: 0;bottom: 0;margin: auto" @click="prevactivity" />
+      <div class="wrap">
+        <mpvue-echarts :echarts="echarts" :onInit="handleInit" ref="echarts" />
+      </div>
+        <img :src="arrowRight" style="width: 50rpx;height: 50rpx;position: absolute;z-index: 999999999;right: 20rpx;top: 0;bottom: 0;margin: auto" @click="nextactivity" />
     </div>
+
   </div>
   <div v-else-if="show==2" style="margin-top: 200rpx;width: 100%;text-align: center">
     <img src="/static/icon/page_null.png" style="width: 330rpx;height: 330rpx" />
@@ -89,6 +95,10 @@
   import * as echarts from 'echarts'
   import mpvueEcharts from 'mpvue-echarts'
   import Avatar from '../../components/avatar'
+  import arrowLeft from '../../../static/icon/left.png'
+  import arrowRight from '../../../static/icon/right.png'
+
+
   let chart = null
   export default {
     data () {
@@ -99,6 +109,8 @@
         dev: [],
         item:{},
         devSize: 0,
+        arrowLeft: arrowLeft,
+        arrowRight: arrowRight,
         selected: null,
         onlineS:0, // 当日累计在线时长
         percent_onlineS:0,
@@ -109,7 +121,8 @@
         video:0, // 视频时长
         percent_video:0,
         // 0 空白 1 有关注 2 无关注
-        show:0
+        show:0,
+        fiveHourCount:0
       }
     },
     components: {
@@ -159,7 +172,7 @@
           this.$api.get('/dev', {'pid': pid, 'order': 'lasttime'}, null, r => {
             this.dev = r.data
             this.devSize = r.total
-            this.initChart(0)
+            this.getData(0)
           })
         }
       },
@@ -168,7 +181,7 @@
           url: '/pages/box/carePerson?pid=' + this.person.pid
         })
       },
-      initChart (index) {
+      getData (index) {
         let _this = this
         let dmac = _this.dev.length>0?_this.dev[index].dmac:0
         let now = new Date()
@@ -176,6 +189,7 @@
         let starttime = endtime - 60*60*24
         _this.selected = dmac
         _this.item = _this.dev[index]
+        _this.fiveHourCount = 0
         _this.$api.get('/activity/minnew', {'dmac': dmac,'starttime':starttime,'endtime':endtime}, null, r => {
           var list = r.data
           var pkt_other = [],date = [], obj = {},listSize = list.length,listIndex = 0
@@ -199,9 +213,6 @@
                 }
                 date.push(_this.$api.formatDate('hh:mm', new Date(starttime * 1000)))
               }
-
-
-
 
               // 如果对象时间大于当天凌晨时间，则开始计算在线时长
               if(obj['time']>=today){
@@ -288,7 +299,11 @@
           }
           _this.percent_video = video/xx * 100
 
-          _this.option = {
+          _this.initChart(date,pkt_other)
+        })
+      },
+      initChart (date,pkt_other) {
+          this.option = {
             grid:{
               top:'20rpx',
               bottom:'30rpx'
@@ -353,8 +368,7 @@
               }
             ]
           }
-          _this.$refs.echarts.init()
-        })
+          this.$refs.echarts.init()
       },
       handleInit (canvas, width, height) {
         chart = echarts.init(canvas, null, {
@@ -381,6 +395,49 @@
         wx.setStorageSync('devdata', dev)
         wx.navigateTo({
           url: '/pages/box/devdetail'
+        })
+      },
+      prevactivity(){
+        this.fiveHourCount = this.fiveHourCount +1
+        this.fiveHourData()
+      },
+      nextactivity(){
+        this.fiveHourCount = this.fiveHourCount - 1
+        this.fiveHourData()
+      },
+      fiveHourData(){
+        let now = new Date()
+        // 只显示5小时数据
+        let endtime = Date.parse(now)/1000 - now.getSeconds() - 60*60*5*this.fiveHourCount
+        let starttime = endtime - 60*60*5
+        let _this = this
+        this.$api.get('/activity/minnew', {'dmac': this.selected,'starttime':starttime,'endtime':endtime}, null, r => {
+          var list = r.data
+          var pkt_other = [], date = [], obj = {}, listSize = list.length, listIndex = 0
+          for (let i = 0, len = 60 * 5; i < len; i++) {
+            if (listIndex < listSize) {
+              obj = list[listIndex]
+            }
+
+            if (starttime === obj['time']) {
+              obj.pkt > 2000 ? obj.pkt = 2000 : obj.pkt
+              if (obj.atype == 1) {
+                pkt_other.push({value: obj['pkt'], itemStyle: {color: '#ed3f14'}})
+              } else if (obj.atype == 2) {
+                pkt_other.push({value: obj['pkt'], itemStyle: {color: '#ff9920'}})
+              } else {
+                pkt_other.push({value: obj['pkt'], itemStyle: {color: '#15bbbc'}})
+              }
+              date.push(_this.$api.formatDate('hh:mm', new Date(starttime * 1000)))
+              listIndex++
+            } else {
+              pkt_other.push({value: 0, itemStyle: {color: '#15bbbc'}})
+              date.push(_this.$api.formatDate('hh:mm', new Date(starttime * 1000)))
+            }
+            starttime = starttime + 60
+          }
+          _this.initChart(date,pkt_other)
+
         })
       }
     }
@@ -479,8 +536,9 @@
     position:relative;
   }
   .wrap {
-    width: 100%;
-    height: 280rpx;
+    width: 90%;
+    height: 100%;
+    margin: 0 auto;
   }
   .addcare{
     width: 470rpx;

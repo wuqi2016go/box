@@ -3,19 +3,19 @@
     <div class="weui-cells  weui-cells_form" style="padding: 20rpx 0rpx">
       <div class="weui-cell">
         <div class="weui-cell__hd"><label  class="weui-label">主机名称</label></div>
-        <div class="weui-cell__bd">
+        <div class="weui-cell__bd" style="color: rgba(154,154,154,0.80);">
           {{ devdata.hostname }}
         </div>
       </div>
       <div class="weui-cell">
         <div class="weui-cell__hd"><label  class="weui-label">设备厂商</label></div>
-        <div class="weui-cell__bd">
+        <div class="weui-cell__bd" style="color: rgba(154,154,154,0.80);">
           {{ devdata.oui }}
         </div>
       </div>
       <div class="weui-cell">
         <div class="weui-cell__hd"><label class="weui-label">MAC地址</label></div>
-        <div class="weui-cell__bd">
+        <div class="weui-cell__bd" style="color: rgba(154,154,154,0.80);">
           {{ devdata.mac }}
         </div>
       </div>
@@ -23,7 +23,7 @@
         <div class="weui-cell__hd">
           <label class="weui-label">IP地址</label>
         </div>
-        <div class="weui-cell__bd">
+        <div class="weui-cell__bd" style="color: rgba(154,154,154,0.80);">
           {{ devdata.devip }}
         </div>
       </div>

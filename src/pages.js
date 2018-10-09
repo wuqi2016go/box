@@ -185,5 +185,10 @@ module.exports = [
     config: {
       navigationBarTitleText: '发现家小盒',
     }
+  }, {
+    path: '/pages/box/userAgreement',
+    config: {
+      navigationBarTitleText: '用户协议',
+    }
   }
 ]

@@ -93,6 +93,7 @@
           }
         }
         this.person = checkboxItems
+        wx.navigateBack()
       },
       personadd () {
         wx.navigateTo({

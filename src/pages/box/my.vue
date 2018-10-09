@@ -54,17 +54,6 @@
         <div class="weui-cell">
           <div class="weui-cell__hd">
             <div class="my_detail">
-            <img src="/static/icon/tjfx.png" class="my_img" />
-            </div>
-          </div>
-          <div class="weui-cell__bd">
-            <h4 class="weui-media-box__title">推荐分享</h4>
-          </div>
-          <div class="weui-cell__ft weui-cell__ft_in-access"></div>
-        </div>
-        <div class="weui-cell">
-          <div class="weui-cell__hd">
-            <div class="my_detail">
             <img src="/static/icon/gywm.png" class="my_img" />
             </div>
           </div>
@@ -82,7 +71,7 @@
           <div class="weui-cell__bd">
             <h4 class="weui-media-box__title">版本号</h4>
           </div>
-          <div class="weui-cell__ft">V1.0.8</div>
+          <div class="weui-cell__ft">V1.0.9</div>
         </div>
       </div>
 

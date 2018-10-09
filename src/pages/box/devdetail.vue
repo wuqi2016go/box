@@ -93,7 +93,7 @@
         <div class="weui-cell__hd" style="color: #00bcd4;">一键禁用</div>
         <div class="weui-cell__bd"></div>
         <div class="weui-cell__ft">
-          <switch v-if="devdata.blocking == 1" checked  @change = "switchChange"/>
+          <switch v-if="devdata.block == 1" checked  @change = "switchChange"/>
           <switch v-else  @change = "switchChange"/>
         </div>
       </div>
@@ -229,7 +229,6 @@
         switchChange (e) {
           console.log('switch发生change事件，携带value值为：' + e.mp.detail.value)
           let dmac = this.devdata.dmac
-          this.$api.setLoadding(false)
           let obj = {}
           if (e.mp.detail.value) {
             obj = {'block': 1, 'dmac': dmac}
@@ -245,7 +244,6 @@
           }
           wx.setStorageSync('devdata', this.devdata)
           wx.setStorageSync('block', obj)
-          this.$api.setLoadding(true)
         }
       }
     }

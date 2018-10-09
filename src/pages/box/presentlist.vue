@@ -16,7 +16,7 @@
       />
 
     <div class="weui-cells weui-cells_after-title" v-if="present.length>0">
-      <div class="weui-cell" @click="" v-for="(item,index) in present" :key="index">
+      <div class="weui-cell" @click="" v-for="(item,index) in present" :key="item.id">
         <div class="weui-cell__hd">
           <Avatar :pid="item.pid" :imageurl="item.imageurl" :online="item.onoff==1" :borderline="true" iclass="dev_avatar"></Avatar>
         </div>
@@ -63,7 +63,7 @@
         }, 1000)
       },
       onShow(){
-        let data = this.$api.formatDate('yyyy-MM-dd',new Date());
+        let data = this.$api.formatDate('yyyy-MM-dd 00:00:00',new Date());
         this.selectDate = data
         this.value = data.split('-')
         this.getpresent()
