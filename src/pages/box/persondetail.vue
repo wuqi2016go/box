@@ -26,7 +26,10 @@
             <div class="slide-item" v-for="(item,index) in dev" :key="item.did" @click="devSelect(item)">
               <div :class="['triangle_border_down',{'triangle_border_on':selected==item.did,'triangle_border_off':selected!=item.did}]"></div>
               <Avatar :pid="item.pid" :online="item.online" :dtype="item.dtype" :borderline="selected==item.did" iclass="dev_avatar"></Avatar>
-              <p class="weui-grid__label" style="color: #999999;margin-top: 0px;font-size: 22rpx">{{ item.dname }}</p>
+              <p class="weui-grid__label" v-if="item.dname!=''" style="color: #999999;margin-top: 0px;font-size: 22rpx">{{ item.dname }}</p>
+              <p class="weui-grid__label" v-else-if="item.hostname!=''" style="color: #999999;margin-top: 0px;font-size: 22rpx">{{ item.hostname }}</p>
+              <p class="weui-grid__label" v-else-if="item.netbios!=''" style="color: #999999;margin-top: 0px;font-size: 22rpx">{{ item.netbios }}</p>
+              <p class="weui-grid__label" v-else-if="item.oui!=''" style="color: #999999;margin-top: 0px;font-size: 22rpx">{{ item.oui }}</p>
             </div>
           </div>
       </div>

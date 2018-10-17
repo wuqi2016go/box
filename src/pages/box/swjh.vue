@@ -1,16 +1,17 @@
 <template>
-  <view class="caption-wrap">
-    <i-collapse name="currentname">
+  <div class="page" v-if="show">
+    <view class="caption-wrap">
+    <i-collapse>
       <i-collapse-item
-        name="name1"
+        :name="index"
         :title="p.pname"
         i-class-title="collapse-item-title"
         :imageurl="p.imageurl"
         i-class-content="collapse-item-content"
-        v-for="(p,index) in person" :key="index" @click="dev(index)">
+        v-for="(p,index) in person" :key="p.pid" @click="dev(index)">
         <view slot="content">
-          <div class="weui-cells weui-cells_after-title">
-            <div class="weui-cell" v-for="(d,devindex) in devList" :key="devindex" style="padding: 0px" @click="devdetail(index)">
+          <div class="weui-cells weui-cells_after-title" style="background-color: #f7f7f7">
+            <div class="weui-cell" v-for="(d,devindex) in devList['person'+index]" :key="d.did" @click="devdetail(index,devindex)">
               <div class="weui-cell__hd">
                 <span>
                   <i class="iconfont" v-bind:class="{'icon-dev_android':d.dtype==0,'icon-dev_iphone':d.dtype==1,
@@ -21,7 +22,10 @@
                 </span>
               </div>
               <div class="weui-cell__bd">
-                <h4 class="weui-media-box__title">{{ d.dname }}</h4>
+                <h4 class="weui-media-box__title" v-if="d.dname !=''" >{{ d.dname }}</h4>
+                <h4 class="weui-media-box__title" v-else-if="d.hostname !=''" >{{ d.hostname }}</h4>
+                <h4 class="weui-media-box__title" v-else-if="d.netbios !=''" >{{ d.netbios }}</h4>
+                <h4 class="weui-media-box__title" v-else-if="d.oui !=''" >{{ d.oui }}</h4>
                 <p class="weui-media-box__desc" v-for="(plan,pindex) in d.plans" :key="pindex">限网时间：{{plan.dtypeStr}}&nbsp;&nbsp;{{plan.starttimeStr}}~{{plan.endtimeStr}}</p>
               </div>
               <div class="weui-cell__ft weui-cell__ft_in-access"></div>
@@ -32,15 +36,23 @@
 
     </i-collapse>
   </view>
+  </div>
+  <div v-else style="margin-top: 200rpx;width: 100%;text-align: center">
+    <img src="/static/icon/page_null.png" style="width: 300rpx;height: 300rpx" />
+    <h4 class="weui-media-box__desc">{{message}}</h4>
+  </div>
 </template>
 
 <script>
     export default {
       data () {
         return {
+          show:false,
           currentname: 'name2',
+          message:'暂无数据',
           person: [],
-          devList:[]
+          devList:{},
+          selectPerson:{}
         }
       },
       onShow (){
@@ -58,6 +70,7 @@
               _this.getDev(obj)
             }
             _this.person = list
+            list.length>0?_this.show = true:_this.show = false
           })
         },
         getDev(obj){
@@ -75,32 +88,37 @@
           })
         },
         dev(index){
-          this.devList = this.person[index].dev
-          for(let k=0,len=this.devList.length;k<len; k++){
-            let plans = this.devList[k].plans
-            for(let i=0,len=plans.length;i<len; i++){
-              if(plans[i].dtype == 0){
-                plans[i]['dtypeStr'] = '每日'
-              }else if(plans[i].dtype == 1){
-                plans[i]['dtypeStr'] = '周一至周五'
-              }else if(plans[i].dtype == 2){
-                plans[i]['dtypeStr'] = '周六 周日'
+          let _this = this
+          let devList = _this.person[index].dev
+          _this.selectPerson = _this.person[index]
+          devList.forEach(function (dev,i) {
+            let plans = dev.plans
+            plans.forEach(function (v,k) {
+              if(v.dtype == 0){
+                v['dtypeStr'] = '每日'
+              }else if(v.dtype == 1){
+                v['dtypeStr'] = '周一至周五'
+              }else if(v.dtype == 2){
+                v['dtypeStr'] = '周六 周日'
               }
-              plans[i]['starttimeStr'] = this.$api.formatDate('hh:mm', new Date(plans[i].starttime * 1000))
-              plans[i]['endtimeStr'] = this.$api.formatDate('hh:mm', new Date(plans[i].endtime * 1000))
-            }
-          }
+              v['starttimeStr'] = _this.$api.formatDate('hh:mm', new Date(v.starttime * 1000))
+              v['endtimeStr'] = _this.$api.formatDate('hh:mm', new Date(v.endtime * 1000))
+            })
+          })
+          this.devList['person'+index] = devList
         },
-        devdetail (index) {
-          let dev = this.devList[index]
+        devdetail (index,devindex) {
+          let dev = this.devList['person'+index][devindex]
           if (dev['online']) {
             dev['color'] = 'green'
           }else{
             dev['color'] = 'grey'
           }
+          dev['mac'] = this.$api.ToMac(dev.dmac)
           dev['firstTimeStr'] = this.$api.formatDate('yyyy-MM-dd hh:mm:ss', new Date(dev.firsttime * 1000))
           dev['lastTimeStr'] = this.$api.formatDate('yyyy-MM-dd hh:mm:ss', new Date(dev.lasttime * 1000))
-          dev.person = this.person
+          dev['person'] = this.selectPerson
+          delete dev['person'].dev
           wx.setStorageSync('devdata', dev)
           wx.navigateTo({
             url: '/pages/box/devdetail'

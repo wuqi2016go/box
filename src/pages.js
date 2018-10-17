@@ -153,9 +153,9 @@ module.exports = [
     }
   }, {
     path: '/pages/box/account',
-    enablePullDownRefresh: true,
     config: {
       navigationBarTitleText: '账号管理',
+      enablePullDownRefresh: true,
       usingComponents: {
         'i-avatar': '../../iView/avatar/index'
       }

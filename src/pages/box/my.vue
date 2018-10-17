@@ -71,7 +71,7 @@
           <div class="weui-cell__bd">
             <h4 class="weui-media-box__title">版本号</h4>
           </div>
-          <div class="weui-cell__ft">V1.0.9</div>
+          <div class="weui-cell__ft">V1.1.0</div>
         </div>
       </div>
 

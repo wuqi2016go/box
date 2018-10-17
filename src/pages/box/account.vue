@@ -17,6 +17,7 @@
   </div>
   <div v-else style="margin-top: 200rpx;width: 100%;text-align: center">
     <img src="/static/icon/page_null.png" style="width: 300rpx;height: 300rpx" />
+    <h4 class="weui-media-box__desc">{{message}}</h4>
   </div>
 </template>
 
@@ -25,6 +26,7 @@
       data () {
         return {
           show: false,
+          message:'非管理用户，权限不足',
           account: [],
           params:{
             uid:0,
@@ -39,14 +41,17 @@
       methods:{
         getAccount(){
           let user = wx.getStorageSync('user')
+          let _this = this
           this.$api.get('/usr-box/'+user.box.bid,null,null,r =>{
             if(r.data.length){
               this.show = true
               let list = r.data
-              for(let i=0,len =list.length;i<len;i++){
-                list[i]['imageurl'] = this.$api.ImgName(list[i]['uicon'])
-              }
+              list.forEach(function (v,k) {
+                v['imageurl'] = _this.$api.ImgName(v['uicon'])
+              })
               this.account = list
+            }else{
+              this.message = '暂无数据'
             }
           })
         },
@@ -82,6 +87,7 @@
         }
       },
       async onPullDownRefresh () {
+        wx.showNavigationBarLoading()
         this.getAccount()
         setTimeout(_ => {
           wx.hideNavigationBarLoading()

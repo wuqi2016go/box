@@ -35,7 +35,10 @@
                 'icon-dev_taishiji':item.dtype==6, 'icon-dev_jiqiren':item.dtype==7,'icon-dev_home':item.dtype==8, 'icon-dev_tv':item.dtype==9}"></i>
               <img v-if="item.blocking==1" src="/static/icon/jzsw.png" class="position" />
             </div>
-            <p class="weui-grid__label" style="color: #999999;margin-top: 0px;font-size: 22rpx">{{ item.dname }}</p>
+            <p v-if="item.dname!=''" class="weui-grid__label" style="color: #999999;margin-top: 0px;font-size: 22rpx">{{ item.dname }}</p>
+            <p v-else-if="item.hostname!=''" class="weui-grid__label" style="color: #999999;margin-top: 0px;font-size: 22rpx">{{ item.hostname }}</p>
+            <p v-else-if="item.netbios!=''" class="weui-grid__label" style="color: #999999;margin-top: 0px;font-size: 22rpx">{{ item.netbios }}</p>
+            <p v-else-if="item.oui!=''" class="weui-grid__label" style="color: #999999;margin-top: 0px;font-size: 22rpx">{{ item.oui }}</p>
           </div>
         </div>
         <div style="text-align: center;padding: 30rpx" v-else>未添加设备</div>
@@ -378,7 +381,6 @@
         canvas.setChart(chart)
         chart.setOption(this.option)
         wx.hideLoading()
-        this.$api.setLoadding(true)
         return chart
       },
       devdetail () {
@@ -400,10 +402,18 @@
       prevactivity(){
         this.fiveHourCount = this.fiveHourCount +1
         this.fiveHourData()
+        wx.showLoading({
+          title: '加载中',
+          mask:true
+        })
       },
       nextactivity(){
         this.fiveHourCount = this.fiveHourCount - 1
         this.fiveHourData()
+        wx.showLoading({
+          title: '加载中',
+          mask:true
+        })
       },
       fiveHourData(){
         let now = new Date()

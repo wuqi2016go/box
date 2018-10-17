@@ -24,6 +24,7 @@
           canIUse: wx.canIUse('button.open-type.getUserInfo'),
           code:'',
           unionid:'',
+          userInfo:{},
           user:{},
           loginType:0,
           show:false
@@ -55,6 +56,7 @@
                     // 已经授权，可以直接调用 getUserInfo 获取头像昵称
                     wx.getUserInfo({
                       success: function (res) {
+                        _this.userInfo = res.userInfo
                         wx.request({
                           url: baseUrl + '/getunionid',
                           data: {'code': code, 'iv': res.iv, 'encryptedData': res.encryptedData},
@@ -168,9 +170,9 @@
             success: r => {
               if(r.data.data && r.data.data['box']){
                 let user = r.data.data
-                this.wxlogin({'wxuuid': this.unionid,'bmac':user['box'].bmac})
+                this.wxlogin({'wxuuid': this.unionid,'bmac':user['box'].bmac,'uname':this.userInfo.nickName})
               }else{
-                this.wxlogin({'wxuuid': this.unionid})
+                this.wxlogin({'wxuuid': this.unionid,'uname':this.userInfo.nickName})
               }
             }
           })
