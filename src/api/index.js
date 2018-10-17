@@ -1,8 +1,4 @@
-// const baseUrl = 'https://192.168.168.149:8080/api/v1/app'
-// const baseUrl = 'https://116.62.223.98:8080/api/test/app'
-const baseUrl = 'https://www.hobox.com.cn:8080/api/test/app'
-// const baseUrl = '/api/v1/app'
-// const baseUrl = '';
+const baseUrl = 'https://192.168.168.149:8080/api/v1/app'
 var loadding = true
 
 function apiAxios (method, url, params, editHeaders, success, failure) {
