@@ -89,7 +89,7 @@
           console.log(info);
         },
         select(val, val2) {
-          this.selectDate = val[0]+'-'+val[1]+'-'+val[2]
+          this.selectDate = this.$api.formatDate('yyyy-MM-dd 00:00:00',new Date(val[0]+'-'+val[1]+'-'+val[2]));
           this.getpresent()
         },
         getpresent () {
