@@ -46,6 +46,14 @@
     </div>
 
     <div style="background: #f7f7f7;height: 20rpx"></div>
+    <i-cell-group i-class="switchColor">
+      <i-cell title="在线时长统计">
+        <i-switch  :value="switch1" size="large" @click="onChange" slot="footer">
+          <view slot="open">今日</view>
+          <view slot="close">昨日</view>
+        </i-switch>
+      </i-cell>
+    </i-cell-group>
     <div class="weui-cells" style="margin-top: 0px">
       <div class="weui-cell">
         <div class="weui-cell__bd" @click="devdetail">
@@ -66,7 +74,7 @@
 
     <div style="background: #f7f7f7;height: 20rpx"></div>
     <div class="weui-media-box__title">
-      <div style="width: 100%;height: 60rpx;text-align: center">最近活跃度</div>
+      <div style="width: 100%;height: 60rpx;text-align: center">{{activeTime}}&nbsp;活跃度</div>
       <div class="title">
         <div style="background: #ed3f14;height: 22rpx;width: 22rpx;margin: 18rpx 4rpx"></div>
         <div>游戏</div>
@@ -112,6 +120,7 @@
         dev: [],
         item:{},
         devSize: 0,
+        switch1: true,
         arrowLeft: arrowLeft,
         arrowRight: arrowRight,
         selected: null,
@@ -125,7 +134,10 @@
         percent_video:0,
         // 0 空白 1 有关注 2 无关注
         show:0,
-        fiveHourCount:0
+        fiveHourCount:0,
+        tjStartTime:new Date(new Date().setHours(0, 0, 0, 0)) / 1000,
+        tjEndTime: Date.parse(new Date())/1000 - new Date().getSeconds(),
+        activeTime: this.$api.formatDate('MM月dd日',new Date())
       }
     },
     components: {
@@ -175,135 +187,114 @@
           this.$api.get('/dev', {'pid': pid, 'order': 'lasttime'}, null, r => {
             this.dev = r.data
             this.devSize = r.total
-            this.getData(0)
+            this.selected = r.data.length>0?r.data[0].dmac:0
+            this.tjOnlineTime()
+            this.fiveHourData()
           })
         }
+      },
+      tjOnlineTime(){
+        let params = {'dmac': this.selected,'starttime':this.tjStartTime,'endtime':this.tjEndTime}
+        let onlineS=0,QQ_WECAT =0,game=0,video=0
+        this.$api.get('/activity/minnew', params, null, r => {
+          r.data.forEach(function (v,k) {
+            if(v.pkt>=200){
+              onlineS++
+            }
+            // sns: 0 QQ 1 微信 2 微博
+            // atype: 1 game 2 video
+            if((v.sns>>0) & 1 == 1 || (v.sns>>1) & 1 == 1){
+              QQ_WECAT ++
+            }
+            if(v.atype === 1){game++}
+            if(v.atype === 2){video++}
+          })
+          if(QQ_WECAT>onlineS){ QQ_WECAT = onlineS }
+          let xx = onlineS>180?onlineS:180
+          if(onlineS>60){
+            this.onlineS = parseInt(onlineS/60) + '小时'
+            if(onlineS%60 - (onlineS%60)%10 > 0){
+              this.onlineS += (onlineS%60 - (onlineS%60)%10) + '分钟'
+            }
+          }else{
+            if(onlineS - onlineS%10 === 0){
+              this.onlineS = '不足10分钟'
+              onlineS = 10
+            }else{
+              this.onlineS = onlineS - onlineS%10 + '分钟'
+            }
+          }
+          this.percent_onlineS = onlineS/xx * 100
+
+          if(QQ_WECAT>60){
+            this.QQ_WECAT = parseInt(QQ_WECAT/60) + '小时'
+            if(QQ_WECAT%60 - (QQ_WECAT%60)%10 > 0){
+              this.QQ_WECAT += (QQ_WECAT%60 - (QQ_WECAT%60)%10) + '分钟'
+            }
+          }else{
+            if(QQ_WECAT - QQ_WECAT%10 === 0){
+              this.QQ_WECAT = '不足10分钟'
+              QQ_WECAT = 10
+            }else{
+              this.QQ_WECAT = QQ_WECAT - QQ_WECAT%10 + '分钟'
+            }
+          }
+          this.percent_QQ_WECAT = QQ_WECAT/xx * 100
+
+          if(game>60){
+            this.game = parseInt(game/60) + '小时'
+            if(game%60 - (game%60)%10 > 0){
+              this.game += (game%60 - (game%60)%10) + '分钟'
+            }
+          }else{
+            if(game - game%10 === 0){
+              this.game = '不足10分钟'
+              game = 10
+            }else{
+              this.game = game - game%10 + '分钟'
+            }
+          }
+          this.percent_game = game/xx * 100
+
+          if(video>60){
+            this.video = parseInt(video/60) + '小时'
+            if(video%60 - (video%60)%10 > 0){
+              this.video += (video%60 - (video%60)%10) + '分钟'
+            }
+          }else{
+            if(video - video%10 === 0){
+              this.video = '不足10分钟'
+              video = 10
+            }else{
+              this.video = video - video%10 + '分钟'
+            }
+          }
+          this.percent_video = video/xx * 100
+        })
       },
       carePerson () {
         wx.navigateTo({
           url: '/pages/box/carePerson?pid=' + this.person.pid
         })
       },
-      getData (index) {
-        let _this = this
-        let dmac = _this.dev.length>0?_this.dev[index].dmac:0
-        let now = new Date()
-        let endtime = Date.parse(now)/1000 - now.getSeconds()
-        let starttime = endtime - 60*60*24
-        _this.selected = dmac
-        _this.item = _this.dev[index]
-        _this.fiveHourCount = 0
-        _this.$api.get('/activity/minnew', {'dmac': dmac,'starttime':starttime,'endtime':endtime}, null, r => {
-          var list = r.data
-          var pkt_other = [],date = [], obj = {},listSize = list.length,listIndex = 0
-          var onlineS=0,QQ_WECAT =0,game=0,video=0
-          var today = new Date(new Date().setHours(0, 0, 0, 0)) / 1000
-          for (let i = 0, len = 60*24; i < len; i++) {
-            if(listIndex<listSize){
-              obj = list[listIndex]
-            }
-
-            if (starttime === obj['time']) {
-
-              if(starttime>endtime-5*60*60){
-                obj.pkt>2000?obj.pkt = 2000:obj.pkt
-                if(obj.atype == 1){
-                  pkt_other.push({value:obj['pkt'],itemStyle:{color:'#ed3f14'}})
-                } else if(obj.atype == 2){
-                  pkt_other.push({value:obj['pkt'],itemStyle:{color:'#ff9920'}})
-                } else {
-                  pkt_other.push({value:obj['pkt'],itemStyle:{color:'#15bbbc'}})
-                }
-                date.push(_this.$api.formatDate('hh:mm', new Date(starttime * 1000)))
-              }
-
-              // 如果对象时间大于当天凌晨时间，则开始计算在线时长
-              if(obj['time']>=today){
-                if(obj.pkt>=200){
-                  onlineS++
-                }
-                // sns: 0 QQ 1 微信 2 微博
-                // atype: 1 game 2 video
-                if((obj.sns>>0) & 1 == 1 || (obj.sns>>1) & 1 == 1){
-                  QQ_WECAT ++
-                }
-                if(obj.atype === 1){game++}
-                if(obj.atype === 2){video++}
-              }
-              listIndex++
-            } else {
-              if(starttime>endtime-5*60*60) {
-                pkt_other.push({value: 0, itemStyle: {color: '#15bbbc'}})
-                date.push(_this.$api.formatDate('hh:mm', new Date(starttime * 1000)))
-              }
-            }
-            starttime = starttime + 60
-          }
-
-          if(QQ_WECAT>onlineS){ QQ_WECAT = onlineS }
-          let xx = onlineS>180?onlineS:180
-          if(onlineS>60){
-            _this.onlineS = parseInt(onlineS/60) + '小时'
-            if(onlineS%60 - (onlineS%60)%10 > 0){
-              _this.onlineS += (onlineS%60 - (onlineS%60)%10) + '分钟'
-            }
-          }else{
-            if(onlineS - onlineS%10 === 0){
-              _this.onlineS = '不足10分钟'
-              onlineS = 10
-            }else{
-              _this.onlineS = onlineS - onlineS%10 + '分钟'
-            }
-          }
-          _this.percent_onlineS = onlineS/xx * 100
-
-          if(QQ_WECAT>60){
-            _this.QQ_WECAT = parseInt(QQ_WECAT/60) + '小时'
-            if(QQ_WECAT%60 - (QQ_WECAT%60)%10 > 0){
-              _this.QQ_WECAT += (QQ_WECAT%60 - (QQ_WECAT%60)%10) + '分钟'
-            }
-          }else{
-            if(QQ_WECAT - QQ_WECAT%10 === 0){
-              _this.QQ_WECAT = '不足10分钟'
-              QQ_WECAT = 10
-            }else{
-              _this.QQ_WECAT = QQ_WECAT - QQ_WECAT%10 + '分钟'
-            }
-          }
-          _this.percent_QQ_WECAT = QQ_WECAT/xx * 100
-
-          if(game>60){
-            _this.game = parseInt(game/60) + '小时'
-            if(game%60 - (game%60)%10 > 0){
-              _this.game += (game%60 - (game%60)%10) + '分钟'
-            }
-          }else{
-            if(game - game%10 === 0){
-              _this.game = '不足10分钟'
-              game = 10
-            }else{
-              _this.game = game - game%10 + '分钟'
-            }
-          }
-          _this.percent_game = game/xx * 100
-
-          if(video>60){
-            _this.video = parseInt(video/60) + '小时'
-            if(video%60 - (video%60)%10 > 0){
-              _this.video += (video%60 - (video%60)%10) + '分钟'
-            }
-          }else{
-            if(video - video%10 === 0){
-              _this.video = '不足10分钟'
-              video = 10
-            }else{
-              _this.video = video - video%10 + '分钟'
-            }
-          }
-          _this.percent_video = video/xx * 100
-
-          _this.initChart(date,pkt_other)
-        })
+      getData(index){
+        this.selected = this.dev[index].dmac
+        this.fiveHourCount =0
+        this.tjOnlineTime()
+        this.fiveHourData()
+      },
+      onChange(){
+        this.switch1 = !this.switch1
+        if(!this.switch1){
+          // 昨天开始和结束时间
+          this.tjEndTime = this.tjStartTime
+          this.tjStartTime = this.tjStartTime - 60*60*24
+          this.tjOnlineTime()
+        }else{
+          this.tjStartTime = new Date(new Date().setHours(0, 0, 0, 0)) / 1000
+          this.tjEndTime = Date.parse(new Date())/1000 - new Date().getSeconds()
+          this.tjOnlineTime()
+        }
       },
       initChart (date,pkt_other) {
           this.option = {
@@ -420,6 +411,7 @@
         // 只显示5小时数据
         let endtime = Date.parse(now)/1000 - now.getSeconds() - 60*60*5*this.fiveHourCount
         let starttime = endtime - 60*60*5
+        this.activeTime = this.$api.formatDate('MM月dd日',new Date(endtime*1000))
         let _this = this
         this.$api.get('/activity/minnew', {'dmac': this.selected,'starttime':starttime,'endtime':endtime}, null, r => {
           var list = r.data

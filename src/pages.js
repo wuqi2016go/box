@@ -30,7 +30,9 @@ module.exports = [
     config: {
       navigationBarTitleText: '关注',
       usingComponents: {
-        "i-progress": "../../iView/progress/index"
+        "i-progress": "../../iView/progress/index",
+        'i-cell': '../../iView/cell/index',
+        "i-switch": "../../iView/switch/index"
       }
     }
   }, {
