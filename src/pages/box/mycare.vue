@@ -87,11 +87,15 @@
     </div>
 
     <div style="width: 100%;height: 280rpx;position: relative">
-        <img :src="arrowLeft" style="width: 50rpx;height: 50rpx;position: absolute;z-index: 999999999;left: 20rpx;top: 0;bottom: 0;margin: auto" @click="prevactivity" />
+      <div style="position: absolute;z-index: 999999999;height: 100%;width: 70rpx;" @click="prevactivity">
+        <img :src="arrowLeft" style="position: absolute;width: 50rpx;height: 50rpx;left: 20rpx;top: 0;bottom: 0;margin: auto" />
+      </div>
       <div class="wrap">
         <mpvue-echarts :echarts="echarts" :onInit="handleInit" ref="echarts" />
       </div>
-        <img :src="arrowRight" style="width: 50rpx;height: 50rpx;position: absolute;z-index: 999999999;right: 20rpx;top: 0;bottom: 0;margin: auto" @click="nextactivity" />
+      <div style="position: absolute;z-index: 999999999;height: 100%;width: 70rpx;right: 0;top:0" @click="nextactivity">
+        <img :src="arrowRight" style="width: 50rpx;height: 50rpx;position: absolute;z-index: 999999999;right: 20rpx;top: 0;bottom: 0;margin: auto" />
+      </div>
     </div>
 
   </div>
@@ -152,19 +156,21 @@
       let carePerson = wx.getStorageSync('careperson')
       if (carePerson) {
         carePerson.care = true
+        // 显示关注页面
+        this.show=1
         this.person = carePerson
-        wx.removeStorageSync('careperson')
+        this.getDev()
         this.$api.put('/person/' + carePerson.pid + '/care', carePerson, null, r => {
-          this.getDev()
+          wx.removeStorageSync('careperson')
           wx.showToast({
             title: '关注成功',
             icon: 'none',
-            duration: 1500
+            duration: 3000
           })
-          return
         })
+      }else{
+        this.getCare()
       }
-      this.getCare()
     },
     methods: {
       getCare () {
@@ -176,7 +182,6 @@
             this.getDev()
           }else{
             // 若没有关注的人则取消加载
-            wx.hideLoading()
             this.show = 2
           }
         })
@@ -392,19 +397,19 @@
       },
       prevactivity(){
         this.fiveHourCount = this.fiveHourCount +1
-        this.fiveHourData()
         wx.showLoading({
           title: '加载中',
           mask:true
         })
+        this.fiveHourData()
       },
       nextactivity(){
         this.fiveHourCount = this.fiveHourCount - 1
-        this.fiveHourData()
         wx.showLoading({
           title: '加载中',
           mask:true
         })
+        this.fiveHourData()
       },
       fiveHourData(){
         let now = new Date()
@@ -522,6 +527,7 @@
     margin: 0 auto;
     border-radius: 50px;
     position: relative;
+    border: 2rpx solid transparent;
   }
   .triangle_border_on{
     border-color:#00bcd4 transparent transparent;/*灰 透明 透明 */
