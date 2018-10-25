@@ -1,0 +1,12 @@
+<view id="{{name}}" class="i-class i-collapse-item ">
+    <view class="i-collapse-item-title-wrap" bindtap="trigger">
+        <i-avatar src="{{ imageurl }}" size="default" i-class="personavatar" wx:if="{{ imageurl !== '' }}" ></i-avatar>
+        <text class="i-collapse-item-title i-class-title">{{title}}</text>
+        <view class="cell__ft">
+          <i-icon size="20" type="enterinto" color="#cccccc" i-class="{{ showContent ? 'i-collapse-item-arrow-show' : 'i-collapse-item-arrow' }}"/>
+        </view>
+    </view>
+    <view class="i-collapse-item-content {{showContent}}  i-class-content">
+        <slot name="content"></slot>
+    </view>
+</view>

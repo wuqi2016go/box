@@ -1,0 +1,8 @@
+.i-avatar{display:inline-block;text-align:center;background:#ccc;color:#fff;white-space:nowrap;position:relative;overflow:hidden;vertical-align:middle;width:32px;height:32px;line-height:32px;border-radius:100%;font-size:18px}.i-avatar .ivu-avatar-string{line-height:32px}.i-avatar-large{width:95rpx;height:95rpx;line-height:95rpx;border-radius:95rpx;font-size:24px}.i-avatar-large .ivu-avatar-string{line-height:95rpx}.i-avatar-small{width:24px;height:24px;line-height:24px;border-radius:12px;font-size:14px}.i-avatar-small .ivu-avatar-string{line-height:24px}.i-avatar-image{background:0 0}.i-avatar-square{border-radius:4px}.i-avatar>image{width:100%;height:100%}
+  .imagegray{
+    background-color: #eeeeee !important;
+    -webkit-filter: grayscale(100%);
+    -webkit-filter: grayscale(1);
+    filter: grayscale(100%);
+    filter:gray;
+  }

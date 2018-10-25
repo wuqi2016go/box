@@ -97,7 +97,7 @@
         <img :src="arrowRight" style="width: 50rpx;height: 50rpx;position: absolute;z-index: 999999999;right: 20rpx;top: 0;bottom: 0;margin: auto" />
       </div>
     </div>
-
+    <i-toast id="toast" />
   </div>
   <div v-else-if="show==2" style="margin-top: 200rpx;width: 100%;text-align: center">
     <img src="/static/icon/page_null.png" style="width: 330rpx;height: 330rpx" />
@@ -112,7 +112,8 @@
   import Avatar from '../../components/avatar'
   import arrowLeft from '../../../static/icon/left.png'
   import arrowRight from '../../../static/icon/right.png'
-
+  const { $Toast } = require('../../iView/base/index');
+  // import $Toast from '@/iView/base/index'
 
   let chart = null
   export default {
@@ -162,11 +163,10 @@
         this.getDev()
         this.$api.put('/person/' + carePerson.pid + '/care', carePerson, null, r => {
           wx.removeStorageSync('careperson')
-          wx.showToast({
-            title: '关注成功',
-            icon: 'none',
-            duration: 3000
-          })
+          $Toast({
+            content: '关注成功',
+            type: 'success'
+          });
         })
       }else{
         this.getCare()
@@ -376,7 +376,6 @@
         })
         canvas.setChart(chart)
         chart.setOption(this.option)
-        wx.hideLoading()
         return chart
       },
       devdetail () {
@@ -397,18 +396,24 @@
       },
       prevactivity(){
         this.fiveHourCount = this.fiveHourCount +1
-        wx.showLoading({
-          title: '加载中',
-          mask:true
-        })
+        $Toast({
+          content: '加载中',
+          type: 'loading'
+        });
+        setTimeout(() => {
+          $Toast.hide();
+        }, 1000);
         this.fiveHourData()
       },
       nextactivity(){
         this.fiveHourCount = this.fiveHourCount - 1
-        wx.showLoading({
-          title: '加载中',
-          mask:true
-        })
+        $Toast({
+          content: '加载中',
+          type: 'loading'
+        });
+        setTimeout(() => {
+          $Toast.hide();
+        }, 1000);
         this.fiveHourData()
       },
       fiveHourData(){

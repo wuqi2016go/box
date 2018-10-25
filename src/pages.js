@@ -32,7 +32,8 @@ module.exports = [
       usingComponents: {
         "i-progress": "../../iView/progress/index",
         'i-cell': '../../iView/cell/index',
-        "i-switch": "../../iView/switch/index"
+        "i-switch": "../../iView/switch/index",
+        "i-toast": "../../iView/toast/index"
       }
     }
   }, {
