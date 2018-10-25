@@ -87,14 +87,14 @@
     </div>
 
     <div style="width: 100%;height: 280rpx;position: relative">
-      <div style="position: absolute;z-index: 999999999;height: 100%;width: 70rpx;" @click="prevactivity">
+      <div style="position: absolute;height: 100%;width: 100rpx;z-index: 999999999" @click="prevactivity">
         <img :src="arrowLeft" style="position: absolute;width: 50rpx;height: 50rpx;left: 20rpx;top: 0;bottom: 0;margin: auto" />
       </div>
       <div class="wrap">
         <mpvue-echarts :echarts="echarts" :onInit="handleInit" ref="echarts" />
       </div>
-      <div style="position: absolute;z-index: 999999999;height: 100%;width: 70rpx;right: 0;top:0" @click="nextactivity">
-        <img :src="arrowRight" style="width: 50rpx;height: 50rpx;position: absolute;z-index: 999999999;right: 20rpx;top: 0;bottom: 0;margin: auto" />
+      <div style="position: absolute;height: 100%;width: 100rpx;right: 0;top:0;z-index: 999999999" @click="nextactivity">
+        <img :src="arrowRight" style="width: 50rpx;height: 50rpx;position: absolute;right: 20rpx;top: 0;bottom: 0;margin: auto" />
       </div>
     </div>
     <i-toast id="toast" />
@@ -113,7 +113,6 @@
   import arrowLeft from '../../../static/icon/left.png'
   import arrowRight from '../../../static/icon/right.png'
   const { $Toast } = require('../../iView/base/index');
-  // import $Toast from '@/iView/base/index'
 
   let chart = null
   export default {
@@ -305,7 +304,9 @@
           this.option = {
             grid:{
               top:'20rpx',
-              bottom:'30rpx'
+              bottom:'30rpx',
+              left:'20rpx',
+              right:'0rpx'
             },
             xAxis: {
               data: date,
@@ -549,9 +550,10 @@
     position:relative;
   }
   .wrap {
-    width: 90%;
+    width: 80%;
     height: 100%;
     margin: 0 auto;
+    z-index: -1;
   }
   .addcare{
     width: 470rpx;
