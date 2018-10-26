@@ -9,8 +9,8 @@
 	},
 	"miniprogramRoot": "./dist/",
 	"compileType": "miniprogram",
-	"appid": "touristappid",
-	"projectname": "mpvue-echart-example",
+	"appid": "wx8188cd6831a6c7b8",
+	"projectname": "box",
 	"condition": {
 		"search": {
 			"current": -1,
