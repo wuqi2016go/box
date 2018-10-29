@@ -2,7 +2,7 @@
 	"description": "项目配置文件。",
 	"setting": {
 		"urlCheck": true,
-		"es6": false,
+		"es6": true,
 		"postcss": true,
 		"minified": true,
 		"newFeature": true
@@ -11,6 +11,7 @@
 	"compileType": "miniprogram",
 	"appid": "wx8188cd6831a6c7b8",
 	"projectname": "box",
+	"libVersion": "2.3.1",
 	"condition": {
 		"search": {
 			"current": -1,

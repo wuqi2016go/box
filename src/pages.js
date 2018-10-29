@@ -77,8 +77,7 @@ module.exports = [
     config: {
       navigationBarTitleText: '成员详情',
       usingComponents: {
-        'i-avatar': '../../iView/avatar/index',
-        'i-message': '../../iView/message/index'
+        'i-avatar': '../../iView/avatar/index'
       }
     }
   }, {

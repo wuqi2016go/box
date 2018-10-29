@@ -87,13 +87,13 @@
     </div>
 
     <div style="width: 100%;height: 280rpx;position: relative">
-      <div style="position: absolute;height: 100%;width: 100rpx;z-index: 999999999" @click="prevactivity">
+      <div style="position: absolute;height: 100%;width: 100rpx;z-index: 1" @click="prevactivity">
         <img :src="arrowLeft" style="position: absolute;width: 50rpx;height: 50rpx;left: 20rpx;top: 0;bottom: 0;margin: auto" />
       </div>
       <div class="wrap">
         <mpvue-echarts :echarts="echarts" :onInit="handleInit" ref="echarts" />
       </div>
-      <div style="position: absolute;height: 100%;width: 100rpx;right: 0;top:0;z-index: 999999999" @click="nextactivity">
+      <div style="position: absolute;height: 100%;width: 100rpx;right: 0;top:0;z-index: 1" @click="nextactivity">
         <img :src="arrowRight" style="width: 50rpx;height: 50rpx;position: absolute;right: 20rpx;top: 0;bottom: 0;margin: auto" />
       </div>
     </div>
@@ -419,8 +419,8 @@
       },
       fiveHourData(){
         let now = new Date()
-        // 只显示5小时数据
-        let endtime = Date.parse(now)/1000 - now.getSeconds() - 60*60*5*this.fiveHourCount
+        // 只显示5小时数据,当前时间后延30分钟
+        let endtime = (Date.parse(now)/1000 - now.getSeconds() + 60*30) - 60*60*5*this.fiveHourCount
         let starttime = endtime - 60*60*5
         this.activeTime = this.$api.formatDate('MM月dd日',new Date(endtime*1000))
         let _this = this

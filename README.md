@@ -6,7 +6,7 @@
 
 # 下载代码
 
-git clone http://192.168.168.62:1111/wuqi/box.git
+git clone https://github.com/wuqi2016go/box.git
 
 ``` bash
 # install dependencies
