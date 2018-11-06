@@ -28,8 +28,8 @@
       <div class="weui-media-box" style="padding: 0rpx 10rpx;">
         <div class="slide-box" v-if="dev.length>0">
           <div class="slide-item" v-for="(item,index) in dev" :key="item.did">
-            <div :class="['triangle_border_down',{'triangle_border_on':selected==item.dmac,'triangle_border_off':selected!=item.dmac}]"></div>
-            <div :class="['pointDev',{'dev_online':item.online,'dev_offline': !item.online,'bordercolor':selected==item.dmac}]" @click="getData(index)">
+            <div :class="['triangle_border_down',{'triangle_border_on':selected.dmac==item.dmac,'triangle_border_off':selected.dmac!=item.dmac}]"></div>
+            <div :class="['pointDev',{'dev_online':item.online,'dev_offline': !item.online,'bordercolor':selected.dmac==item.dmac}]" @click="getData(index)">
               <i class="iconfont iconcolor" v-bind:class="{'icon-dev_android':item.dtype==0,'icon-dev_iphone':item.dtype==1,
                 'icon-dev_pad':item.dtype==2,'icon-dev_pad1':item.dtype==3, 'icon-dev_laptop':item.dtype==4, 'icon-dev_laptop1':item.dtype==5,
                 'icon-dev_taishiji':item.dtype==6, 'icon-dev_jiqiren':item.dtype==7,'icon-dev_home':item.dtype==8, 'icon-dev_tv':item.dtype==9}"></i>
@@ -191,14 +191,14 @@
           this.$api.get('/dev', {'pid': pid, 'order': 'lasttime'}, null, r => {
             this.dev = r.data
             this.devSize = r.total
-            this.selected = r.data.length>0?r.data[0].dmac:0
+            this.selected = r.data.length>0?r.data[0]:{}
             this.tjOnlineTime()
             this.fiveHourData()
           })
         }
       },
       tjOnlineTime(){
-        let params = {'dmac': this.selected,'starttime':this.tjStartTime,'endtime':this.tjEndTime}
+        let params = {'dmac': this.selected.dmac,'starttime':this.tjStartTime,'endtime':this.tjEndTime}
         let onlineS=0,QQ_WECAT =0,game=0,video=0
         this.$api.get('/activity/minnew', params, null, r => {
           r.data.forEach(function (v,k) {
@@ -282,7 +282,7 @@
         })
       },
       getData(index){
-        this.selected = this.dev[index].dmac
+        this.selected = this.dev[index]
         this.fiveHourCount =0
         this.tjOnlineTime()
         this.fiveHourData()
@@ -333,6 +333,11 @@
                   }
                   return texts
                 }
+              },
+              splitLine:{
+                lineStyle:{
+                  color:['#eee']
+                }
               }
             },
             dataZoom: [
@@ -380,7 +385,7 @@
         return chart
       },
       devdetail () {
-        let dev = this.item
+        let dev = this.selected
         if (dev.online) {
           dev['color'] = 'green'
         }else{
@@ -424,7 +429,7 @@
         let starttime = endtime - 60*60*5
         this.activeTime = this.$api.formatDate('MM月dd日',new Date(endtime*1000))
         let _this = this
-        this.$api.get('/activity/minnew', {'dmac': this.selected,'starttime':starttime,'endtime':endtime}, null, r => {
+        this.$api.get('/activity/minnew', {'dmac': this.selected.dmac,'starttime':starttime,'endtime':endtime}, null, r => {
           var list = r.data
           var pkt_other = [], date = [], obj = {}, listSize = list.length, listIndex = 0
           for (let i = 0, len = 60 * 5; i < len; i++) {

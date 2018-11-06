@@ -9,6 +9,7 @@
       <button v-if="canIUse"  open-type="getUserInfo" @click="bindGetUserInfo(2)" class="weui-btn authButton">授权登录</button>
       <div v-else>请升级微信版本</div>
     </div>
+    <i-toast id="toast" />
   </div>
   <div v-else style="background: #ffffff;position: fixed;height: 100%;width: 100%;display: flex;">
     <img src="/static/icon/img_launch.jpg" style="width: 100%;height: 100%" />
@@ -18,6 +19,8 @@
 <script>
     const baseUrl = 'https://www.hobox.com.cn:8080/api/test/app'
     import api from '@/api/index'
+    const { $Toast } = require('../../iView/base/index');
+
     export default {
       data () {
         return {
@@ -37,13 +40,10 @@
         bindGetUserInfo (type) {
           // 如果第一次登陆
           if(type===2){
-            wx.showLoading({
-              title: '登录中',
-              mask:true
-            })
-            setTimeout(_ => {
-              wx.hideLoading()
-            }, 1500)
+            $Toast({
+              content: '登陆中',
+              type: 'loading'
+            });
           }
           var _this = this
           wx.login({

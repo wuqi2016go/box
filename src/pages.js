@@ -4,7 +4,8 @@ module.exports = [
     config: {
       navigationBarTitleText: '',
       usingComponents: {
-        'i-avatar': '../../iView/avatar/index'
+        'i-avatar': '../../iView/avatar/index',
+        "i-toast": "../../iView/toast/index"
       }
     }
   }, {
