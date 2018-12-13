@@ -63,9 +63,9 @@
         }, 1000)
       },
       onShow(){
-        let data = this.$api.formatDate('yyyy-MM-dd 00:00:00',new Date());
-        this.selectDate = data
+        let data = this.$api.formatDate('yyyy-MM-dd',new Date());
         this.value = data.split('-')
+        this.selectDate = new Date(new Date().setHours(0, 0, 0, 0)) / 1000;
         this.getpresent()
       },
       methods: {
@@ -89,13 +89,14 @@
           console.log(info);
         },
         select(val, val2) {
-          this.selectDate = this.$api.formatDate('yyyy-MM-dd 00:00:00',new Date(val[0]+'-'+val[1]+'-'+val[2]));
+          this.selectDate = new Date(new Date(val[0]+'-'+val[1]+'-'+val[2]).setHours(0,0,0,0))/1000;
           this.getpresent()
         },
         getpresent () {
-          let times = new Date(this.selectDate).getTime() / 1000
+          let times = this.selectDate;
           let _present = []
           let _this = this
+          console.log({'starttime': times,'endtime':times+60*60*24})
           this.$api.get('/present', {'starttime': times,'endtime':times+60*60*24}, null, r => {
             _present = r.data
             _present.length===0?_this.show = true:''
